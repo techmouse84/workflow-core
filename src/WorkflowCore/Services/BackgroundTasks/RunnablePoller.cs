@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using Abp.Timing;
 using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
@@ -52,7 +53,7 @@ namespace WorkflowCore.Services.BackgroundTasks
                     try
                     {
                         _logger.LogInformation("Polling for runnable workflows");                        
-                        var runnables = await _persistenceStore.GetRunnableInstances(DateTime.Now);
+                        var runnables = await _persistenceStore.GetRunnableInstances(Clock.Now);
                         foreach (var item in runnables)
                         {
                             _logger.LogDebug("Got runnable instance {0}", item);
@@ -77,7 +78,7 @@ namespace WorkflowCore.Services.BackgroundTasks
                     try
                     {
                         _logger.LogInformation("Polling for unprocessed events");                        
-                        var events = await _persistenceStore.GetRunnableEvents(DateTime.Now);
+                        var events = await _persistenceStore.GetRunnableEvents(Clock.Now);
                         foreach (var item in events.ToList())
                         {
                             _logger.LogDebug($"Got unprocessed event {item}");

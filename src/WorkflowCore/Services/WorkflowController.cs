@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Abp.Runtime.Session;
+using Abp.Timing;
 using Microsoft.Extensions.Logging;
 using WorkflowCore.Exceptions;
 using WorkflowCore.Interface;
@@ -18,7 +20,8 @@ namespace WorkflowCore.Services
         private readonly IQueueProvider _queueProvider;
         private readonly IExecutionPointerFactory _pointerFactory;
         private readonly ILogger _logger;
-        
+        public IAbpSession AbpSession { get; set; }
+
         public WorkflowController(IPersistenceProvider persistenceStore, IDistributedLockProvider lockProvider, IWorkflowRegistry registry, IQueueProvider queueProvider, IExecutionPointerFactory pointerFactory, ILoggerFactory loggerFactory)
         {
             _persistenceStore = persistenceStore;
@@ -27,6 +30,7 @@ namespace WorkflowCore.Services
             _queueProvider = queueProvider;
             _pointerFactory = pointerFactory;
             _logger = loggerFactory.CreateLogger<WorkflowController>();
+            AbpSession = NullAbpSession.Instance;
         }
 
         public Task<string> StartWorkflow(string workflowId, object data = null)
@@ -62,7 +66,7 @@ namespace WorkflowCore.Services
                 Data = data,
                 Description = def.Description,
                 NextExecution = 0,
-                CreateTime = DateTime.Now.ToUniversalTime(),
+                CreateTime = Clock.Now.ToUniversalTime(),
                 Status = WorkflowStatus.Runnable
             };
 
@@ -86,7 +90,7 @@ namespace WorkflowCore.Services
             if (effectiveDate.HasValue)
                 evt.EventTime = effectiveDate.Value.ToUniversalTime();
             else
-                evt.EventTime = DateTime.Now.ToUniversalTime();
+                evt.EventTime = Clock.Now.ToUniversalTime();
 
             evt.EventData = eventData;
             evt.EventKey = eventKey;

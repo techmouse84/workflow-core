@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Abp.Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace WorkflowCore.Models
 {
-    public class WorkflowInstance
+    public class WorkflowInstance : IMayHaveTenant
     {
+        public int? TenantId { get; set; }
+
         public string Id { get; set; }
                 
         public string WorkflowDefinitionId { get; set; }

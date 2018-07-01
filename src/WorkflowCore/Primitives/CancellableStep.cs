@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Abp.Timing;
+using System;
 using System.Linq.Expressions;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
@@ -21,7 +22,7 @@ namespace WorkflowCore.Primitives
             var func = _cancelCondition.Compile();
             if (func((TData) workflow.Data))
             {
-                executionPointer.EndTime = DateTime.Now.ToUniversalTime();
+                executionPointer.EndTime = Clock.Now.ToUniversalTime();
                 executionPointer.Active = false;
             }
         }

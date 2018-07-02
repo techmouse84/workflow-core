@@ -157,6 +157,13 @@ namespace WorkflowCore.Services
             foreach (var input in step.Inputs)
             {
                 var member = (input.Target.Body as MemberExpression);
+
+                if (member == null)
+                {
+                    UnaryExpression ubody = (UnaryExpression)input.Target.Body;
+                    member = ubody.Operand as MemberExpression;
+                }
+
                 object resolvedValue = null;
 
                 switch (input.Source.Parameters.Count)
@@ -171,7 +178,13 @@ namespace WorkflowCore.Services
                         throw new ArgumentException();
                 }
 
-                step.BodyType.GetProperty(member.Member.Name).SetValue(body, resolvedValue);
+                var property = step.BodyType.GetProperty(member.Member.Name);
+
+                var propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+
+                var safeValue = (resolvedValue == null) ? null : Convert.ChangeType(resolvedValue, propertyType);
+
+                property.SetValue(body, safeValue);
             }
         }
 

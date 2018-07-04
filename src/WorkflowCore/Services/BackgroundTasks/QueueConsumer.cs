@@ -82,12 +82,13 @@ namespace WorkflowCore.Services.BackgroundTasks
                         await QueueProvider.QueueWork(item, Queue);
                     }
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException ce)
                 {
+                    Logger.LogError(ce.Message, ce);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex.Message);
+                    Logger.LogError(ex.Message, ex);
                 }
             }
 

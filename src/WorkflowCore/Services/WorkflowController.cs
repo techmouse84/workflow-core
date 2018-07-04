@@ -33,35 +33,36 @@ namespace WorkflowCore.Services
             AbpSession = NullAbpSession.Instance;
         }
 
-        public Task<string> StartWorkflow(string workflowId, object data = null)
+        public Task<string> StartWorkflow(string workflowId, int? tenantId, object data = null)
         {
-            return StartWorkflow(workflowId, null, data);
+            return StartWorkflow(workflowId, tenantId, null, data);
         }
 
-        public Task<string> StartWorkflow(string workflowId, int? version, object data = null)
+        public Task<string> StartWorkflow(string workflowId, int? tenantId, int? version, object data = null)
         {
-            return StartWorkflow<object>(workflowId, version, data);
+            return StartWorkflow<object>(workflowId, tenantId, version, data);
         }
 
-        public Task<string> StartWorkflow<TData>(string workflowId, TData data = null) 
+        public Task<string> StartWorkflow<TData>(string workflowId, int? tenantId, TData data = null) 
             where TData : class
         {
-            return StartWorkflow<TData>(workflowId, null, data);
+            return StartWorkflow<TData>(workflowId, tenantId, null, data);
         }
 
-        public async Task<string> StartWorkflow<TData>(string workflowId, int? version, TData data = null)
+        public async Task<string> StartWorkflow<TData>(string workflowId, int? tenantId, int? version, TData data = null)
             where TData : class
         {
             
-            var def = _registry.GetDefinition(workflowId, version);
+            var def = _registry.GetDefinition(workflowId, tenantId, version);
             if (def == null)
             {
-                throw new WorkflowNotRegisteredException(workflowId, version);
+                throw new WorkflowNotRegisteredException(workflowId, tenantId, version);
             }
 
             var wf = new WorkflowInstance
             {
                 WorkflowDefinitionId = workflowId,
+                TenantId = tenantId,
                 Version = def.Version,
                 Data = data,
                 Description = def.Description,

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Abp.Timing;
 using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
@@ -12,16 +13,14 @@ namespace WorkflowCore.Services.BackgroundTasks
     {
         private readonly IPersistenceProvider _persistenceStore;
         private readonly IDistributedLockProvider _lockProvider;
-        private readonly IDateTimeProvider _datetimeProvider;
 
         protected override QueueType Queue => QueueType.Event;
 
-        public EventConsumer(IPersistenceProvider persistenceStore, IQueueProvider queueProvider, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IWorkflowRegistry registry, IDistributedLockProvider lockProvider, WorkflowOptions options, IDateTimeProvider datetimeProvider)
+        public EventConsumer(IPersistenceProvider persistenceStore, IQueueProvider queueProvider, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IWorkflowRegistry registry, IDistributedLockProvider lockProvider, WorkflowOptions options)
             : base(queueProvider, loggerFactory, options)
         {
             _persistenceStore = persistenceStore;
             _lockProvider = lockProvider;
-            _datetimeProvider = datetimeProvider;
         }
 
         protected override async Task ProcessItem(string itemId, CancellationToken cancellationToken)
@@ -32,7 +31,7 @@ namespace WorkflowCore.Services.BackgroundTasks
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     var evt = await _persistenceStore.GetEvent(itemId);
-                    if (evt.EventTime <= _datetimeProvider.Now.ToUniversalTime())
+                    if (evt.EventTime <= Clock.Now.ToUniversalTime())
                     {
                         var subs = await _persistenceStore.GetSubcriptions(evt.EventName, evt.EventKey, evt.EventTime);
                         var success = true;

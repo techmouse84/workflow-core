@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abp.Timing;
 using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
@@ -10,14 +11,12 @@ namespace WorkflowCore.Services
     public class ExecutionResultProcessor : IExecutionResultProcessor
     {
         private readonly IExecutionPointerFactory _pointerFactory;
-        private readonly IDateTimeProvider _datetimeProvider;
         private readonly ILogger _logger;
         private readonly WorkflowOptions _options;
 
-        public ExecutionResultProcessor(IExecutionPointerFactory pointerFactory, IDateTimeProvider datetimeProvider, WorkflowOptions options, ILoggerFactory loggerFactory)
+        public ExecutionResultProcessor(IExecutionPointerFactory pointerFactory, WorkflowOptions options, ILoggerFactory loggerFactory)
         {
             _pointerFactory = pointerFactory;
-            _datetimeProvider = datetimeProvider;
             _options = options;
             _logger = loggerFactory.CreateLogger<ExecutionResultProcessor>();
         }
@@ -28,7 +27,7 @@ namespace WorkflowCore.Services
             pointer.Outcome = result.OutcomeValue;
             if (result.SleepFor.HasValue)
             {
-                pointer.SleepUntil = _datetimeProvider.Now.ToUniversalTime().Add(result.SleepFor.Value);
+                pointer.SleepUntil = Clock.Now.ToUniversalTime().Add(result.SleepFor.Value);
                 pointer.Status = PointerStatus.Sleeping;
             }
 
@@ -52,7 +51,7 @@ namespace WorkflowCore.Services
             if (result.Proceed)
             {
                 pointer.Active = false;
-                pointer.EndTime = _datetimeProvider.Now.ToUniversalTime();
+                pointer.EndTime = Clock.Now.ToUniversalTime();
                 pointer.Status = PointerStatus.Complete;
 
                 foreach (var outcomeTarget in step.Outcomes.Where(x => object.Equals(x.GetValue(workflow.Data), result.OutcomeValue) || x.GetValue(workflow.Data) == null))
@@ -86,7 +85,7 @@ namespace WorkflowCore.Services
             {
                 case WorkflowErrorHandling.Retry:
                     pointer.RetryCount++;
-                    pointer.SleepUntil = _datetimeProvider.Now.ToUniversalTime().Add(step.RetryInterval ?? def.DefaultErrorRetryInterval ?? _options.ErrorRetryInterval);
+                    pointer.SleepUntil = Clock.Now.ToUniversalTime().Add(step.RetryInterval ?? def.DefaultErrorRetryInterval ?? _options.ErrorRetryInterval);
                     step.PrimeForRetry(pointer);
                     break;
                 case WorkflowErrorHandling.Suspend:
@@ -107,7 +106,7 @@ namespace WorkflowCore.Services
             scope.Push(exceptionPointer.Id);
 
             exceptionPointer.Active = false;
-            exceptionPointer.EndTime = _datetimeProvider.Now.ToUniversalTime();
+            exceptionPointer.EndTime = Clock.Now.ToUniversalTime();
             exceptionPointer.Status = PointerStatus.Failed;
 
             while (scope.Any())
@@ -137,7 +136,7 @@ namespace WorkflowCore.Services
                 if (step.CompensationStepId.HasValue)
                 {
                     pointer.Active = false;
-                    pointer.EndTime = _datetimeProvider.Now.ToUniversalTime();
+                    pointer.EndTime = Clock.Now.ToUniversalTime();
                     pointer.Status = PointerStatus.Compensated;
 
                     var compensationPointer = _pointerFactory.BuildCompensationPointer(def, pointer, exceptionPointer, step.CompensationStepId.Value);

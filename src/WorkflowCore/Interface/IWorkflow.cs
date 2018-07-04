@@ -5,6 +5,7 @@
     {
         string Id { get; }
         int Version { get; }
+        int? TenantId { get; }
         void Build(IWorkflowBuilder<TData> builder);
     }
 

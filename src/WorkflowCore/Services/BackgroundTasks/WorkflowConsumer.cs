@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Abp.Timing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using WorkflowCore.Interface;
@@ -11,19 +12,17 @@ namespace WorkflowCore.Services.BackgroundTasks
     internal class WorkflowConsumer : QueueConsumer, IBackgroundTask
     {
         private readonly IDistributedLockProvider _lockProvider;
-        private readonly IDateTimeProvider _datetimeProvider;
         private readonly ObjectPool<IPersistenceProvider> _persistenceStorePool;
         private readonly ObjectPool<IWorkflowExecutor> _executorPool;
 
         protected override QueueType Queue => QueueType.Workflow;
 
-        public WorkflowConsumer(IPooledObjectPolicy<IPersistenceProvider> persistencePoolPolicy, IQueueProvider queueProvider, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IWorkflowRegistry registry, IDistributedLockProvider lockProvider, IPooledObjectPolicy<IWorkflowExecutor> executorPoolPolicy, IDateTimeProvider datetimeProvider, WorkflowOptions options)
+        public WorkflowConsumer(IPooledObjectPolicy<IPersistenceProvider> persistencePoolPolicy, IQueueProvider queueProvider, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IWorkflowRegistry registry, IDistributedLockProvider lockProvider, IPooledObjectPolicy<IWorkflowExecutor> executorPoolPolicy, WorkflowOptions options)
             : base(queueProvider, loggerFactory, options)
         {
             _persistenceStorePool = new DefaultObjectPool<IPersistenceProvider>(persistencePoolPolicy);
             _executorPool = new DefaultObjectPool<IWorkflowExecutor>(executorPoolPolicy);
             _lockProvider = lockProvider;
-            _datetimeProvider = datetimeProvider;
         }
 
         protected override async Task ProcessItem(string itemId, CancellationToken cancellationToken)
@@ -65,7 +64,7 @@ namespace WorkflowCore.Services.BackgroundTasks
 
                             await persistenceStore.PersistErrors(result.Errors);
 
-                            var readAheadTicks = _datetimeProvider.Now.Add(Options.PollInterval).ToUniversalTime().Ticks;
+                            var readAheadTicks = Clock.Now.Add(Options.PollInterval).ToUniversalTime().Ticks;
 
                             if ((workflow.Status == WorkflowStatus.Runnable) && workflow.NextExecution.HasValue && workflow.NextExecution.Value < readAheadTicks)
                             {
@@ -108,7 +107,7 @@ namespace WorkflowCore.Services.BackgroundTasks
                     return;
                 }
 
-                var target = (workflow.NextExecution.Value - _datetimeProvider.Now.ToUniversalTime().Ticks);
+                var target = (workflow.NextExecution.Value - Clock.Now.ToUniversalTime().Ticks);
                 if (target > 0)
                 {
                     await Task.Delay(TimeSpan.FromTicks(target), cancellationToken);

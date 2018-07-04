@@ -43,27 +43,26 @@ namespace WorkflowCore.Services
             persistenceStore.EnsureStoreExists();
         }
 
-        public Task<string> StartWorkflow(string workflowId, object data = null)
+        public Task<string> StartWorkflow(string workflowId, int? tenantId, object data = null)
         {
-            return _workflowController.StartWorkflow(workflowId, data);
+            return _workflowController.StartWorkflow(workflowId, tenantId, data);
         }
 
-        public Task<string> StartWorkflow(string workflowId, int? version, object data = null)
+        public Task<string> StartWorkflow(string workflowId, int? tenantId, int? version, object data = null)
         {
-            return _workflowController.StartWorkflow<object>(workflowId, version, data);
+            return _workflowController.StartWorkflow<object>(workflowId, tenantId, version, data);
         }
 
-        public Task<string> StartWorkflow<TData>(string workflowId, TData data = null)
+        public Task<string> StartWorkflow<TData>(string workflowId, int? tenantId, TData data = null)
             where TData : class
         {
-            return _workflowController.StartWorkflow<TData>(workflowId, null, data);
+            return _workflowController.StartWorkflow<TData>(workflowId, tenantId, null, data);
         }
-
-
-        public Task<string> StartWorkflow<TData>(string workflowId, int? version, TData data = null)
+        
+        public Task<string> StartWorkflow<TData>(string workflowId, int? tenantId, int? version, TData data = null)
             where TData : class
         {
-            return _workflowController.StartWorkflow(workflowId, version, data);
+            return _workflowController.StartWorkflow(workflowId, tenantId, version, data);
         }
 
         public Task PublishEvent(string eventName, string eventKey, object eventData, DateTime? effectiveDate = null)

@@ -4,8 +4,8 @@ namespace WorkflowCore.Exceptions
 {
     public class WorkflowNotRegisteredException : Exception
     {
-        public WorkflowNotRegisteredException(string workflowId, int? version)
-            : base($"Workflow {workflowId} {version} is not registered")
+        public WorkflowNotRegisteredException(string workflowId, int? tenantId, int? version)
+            : base($"Workflow {workflowId} version {version} tenant {tenantId} is not registered")
         {
         }
     }

@@ -11,7 +11,7 @@ namespace WorkflowCore.Interface
 
         IWorkflowBuilder<T> UseData<T>();
 
-        WorkflowDefinition Build(string id, int version);
+        WorkflowDefinition Build(string id, int? tenantId, int version);
 
         void AddStep(WorkflowStep step);
     }

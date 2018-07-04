@@ -23,10 +23,11 @@ namespace WorkflowCore.Services
             return result;
         }
 
-        public virtual WorkflowDefinition Build(string id, int version)
+        public virtual WorkflowDefinition Build(string id, int? tenantId, int version)
         {
             WorkflowDefinition result = new WorkflowDefinition();
             result.Id = id;
+            result.TenantId = tenantId;
             result.Version = version;
             result.Steps = this.Steps;
             result.DefaultErrorBehavior = DefaultErrorBehavior;
@@ -45,9 +46,9 @@ namespace WorkflowCore.Services
     public class WorkflowBuilder<TData> : WorkflowBuilder, IWorkflowBuilder<TData>
     {
 
-        public override WorkflowDefinition Build(string id, int version)
+        public override WorkflowDefinition Build(string id, int? tenantId, int version)
         {
-            var result = base.Build(id, version);
+            var result = base.Build(id, tenantId, version);
             result.DataType = typeof(TData);
             return result;
         }

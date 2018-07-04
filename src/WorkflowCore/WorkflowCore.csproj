@@ -45,8 +45,4 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Asc.Sproj.Core.Shared\Asc.Sproj.Core.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

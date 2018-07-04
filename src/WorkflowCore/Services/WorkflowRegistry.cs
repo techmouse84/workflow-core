@@ -1,5 +1,4 @@
 ﻿using Abp.Configuration;
-using Asc.Sproj.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;

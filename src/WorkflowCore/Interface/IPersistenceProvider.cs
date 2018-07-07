@@ -32,8 +32,8 @@ namespace WorkflowCore.Interface
         Task<Event> GetEvent(string id);
 
         Task<IEnumerable<string>> GetRunnableEvents(DateTime asAt);
-
-        Task<IEnumerable<string>> GetEvents(string eventName, string eventKey, DateTime asOf);
+        
+        Task<IEnumerable<string>> GetEvents(string eventName, string eventKey, DateTime? asOf, bool? runnable = null);
 
         Task MarkEventProcessed(string id);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Abp.Collections.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -160,13 +161,14 @@ namespace WorkflowCore.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetEvents(string eventName, string eventKey, DateTime asOf)
+        public async Task<IEnumerable<string>> GetEvents(string eventName, string eventKey, DateTime? asOf, bool? runnable = null)
         {
             lock (_events)
             {
                 return _events
                     .Where(x => x.EventName == eventName && x.EventKey == eventKey)
-                    .Where(x => x.EventTime >= asOf)
+                    .WhereIf( asOf.HasValue, x => x.EventTime >= asOf.Value)
+                    .WhereIf( runnable.HasValue, x=> x.IsProcessed == runnable.Value )
                     .Select(x => x.Id)
                     .ToList();
             }

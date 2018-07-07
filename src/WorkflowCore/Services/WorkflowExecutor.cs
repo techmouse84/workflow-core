@@ -181,10 +181,40 @@ namespace WorkflowCore.Services
 
                 var propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
 
-                var safeValue = (resolvedValue == null) ? null : Convert.ChangeType(resolvedValue, propertyType);
+                if ( CanChangeType(resolvedValue, propertyType))
+                {
+                    var safeValue = (resolvedValue == null) ? null : Convert.ChangeType(resolvedValue, propertyType);
 
-                property.SetValue(body, safeValue);
+                    property.SetValue(body, safeValue);
+                }
+                else
+                {
+                    property.SetValue(body, resolvedValue);
+                }
+                    
             }
+        }
+
+        public static bool CanChangeType(object value, Type conversionType)
+        {
+            if (conversionType == null)
+            {
+                return false;
+            }
+
+            if (value == null)
+            {
+                return false;
+            }
+
+            IConvertible convertible = value as IConvertible;
+
+            if (convertible == null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void ProcessOutputs(WorkflowInstance workflow, WorkflowStep step, IStepBody body)

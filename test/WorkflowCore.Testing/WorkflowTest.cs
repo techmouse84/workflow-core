@@ -11,7 +11,7 @@ using WorkflowCore.Models;
 
 namespace WorkflowCore.Testing
 {
-    public abstract class WorkflowTest<TWorkflow, TData> : IDisposable
+    public abstract class WorkflowTest<TWorkflow, TData> :  IDisposable
         where TWorkflow : IWorkflow<TData>, new()
         where TData : class, new()
     {
@@ -33,6 +33,8 @@ namespace WorkflowCore.Testing
             //loggerFactory.AddConsole(LogLevel.Debug);
 
             PersistenceProvider = serviceProvider.GetService<IPersistenceProvider>();
+
+            
             Host = serviceProvider.GetService<IWorkflowHost>();
             Host.RegisterWorkflow<TWorkflow, TData>();
             Host.OnStepError += Host_OnStepError;
@@ -54,10 +56,10 @@ namespace WorkflowCore.Testing
             services.AddWorkflow();
         }
 
-        public string StartWorkflow(TData data)
+        public string StartWorkflow(TData data, int? tenantId = null)
         {
             var def = new TWorkflow();
-            var workflowId = Host.StartWorkflow<TData>(def.Id, data).Result;
+            var workflowId = Host.StartWorkflow<TData>(def.Id, tenantId, data).Result;
             return workflowId;
         }
 

@@ -22,9 +22,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static WorkflowOptions UseSqlServerBroker(this WorkflowOptions options, string connectionString, bool canCreateDb, bool canMigrateDb)
         {
-            options.Services.AddTransient<IQueueConfigProvider, QueueConfigProvider>();
-            options.Services.AddTransient<ISqlCommandExecutor, SqlCommandExecutor>();
-            options.Services.AddTransient<ISqlServerQueueProviderMigrator>(sp => new SqlServerQueueProviderMigrator(connectionString, sp.GetService<IQueueConfigProvider>(), sp.GetService<ISqlCommandExecutor>()));
+            //options.Services.AddTransient<IQueueConfigProvider, QueueConfigProvider>();
+            //options.Services.AddTransient<ISqlCommandExecutor, SqlCommandExecutor>();
+            //options.Services.AddTransient<ISqlServerQueueProviderMigrator>(sp => new SqlServerQueueProviderMigrator(connectionString, sp.GetService<IQueueConfigProvider>(), sp.GetService<ISqlCommandExecutor>()));
+            //TODO change to use abp castle register
 
             var sqlOptions = new SqlServerQueueProviderOptions()
             {

@@ -12,6 +12,7 @@ using Xunit;
 using WorkflowCore.Primitives;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Abp.Timing;
 
 namespace WorkflowCore.UnitTests.Services
 {
@@ -20,15 +21,15 @@ namespace WorkflowCore.UnitTests.Services
         
         protected IExecutionResultProcessor Subject;
         protected IExecutionPointerFactory PointerFactory;
-        protected IDateTimeProvider DateTimeProvider;
+        protected IClockProvider DateTimeProvider;
         protected WorkflowOptions Options;
 
         public ExecutionResultProcessorFixture()
         {
             PointerFactory = A.Fake<IExecutionPointerFactory>();
-            DateTimeProvider = A.Fake<IDateTimeProvider>();
+            DateTimeProvider = A.Fake<IClockProvider>();
 
-            Options = new WorkflowOptions(A.Fake<IServiceCollection>());
+            Options = new WorkflowOptions();
 
             A.CallTo(() => DateTimeProvider.Now).Returns(DateTime.Now);
 
@@ -36,7 +37,7 @@ namespace WorkflowCore.UnitTests.Services
             var loggerFactory = new LoggerFactory();
             loggerFactory.AddConsole(LogLevel.Debug);            
 
-            Subject = new ExecutionResultProcessor(PointerFactory, DateTimeProvider, Options, loggerFactory);
+            Subject = new ExecutionResultProcessor(PointerFactory, Options, loggerFactory);
         }
 
         [Fact(DisplayName = "Should advance workflow")]

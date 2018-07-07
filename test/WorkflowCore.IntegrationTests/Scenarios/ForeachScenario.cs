@@ -36,6 +36,7 @@ namespace WorkflowCore.IntegrationTests.Scenarios
         {
             public string Id => "ForeachWorkflow";
             public int Version => 1;
+            public int? TenantId => null;
             public void Build(IWorkflowBuilder<MyDataClass> builder)
             {
                 builder
@@ -64,7 +65,7 @@ namespace WorkflowCore.IntegrationTests.Scenarios
         public void Scenario()
         {
             var workflowId = StartWorkflow(null);
-            WaitForWorkflowToComplete(workflowId, TimeSpan.FromSeconds(30));
+            WaitForWorkflowToComplete(workflowId, TimeSpan.FromSeconds(20));
 
             Step1Ticker.Should().Be(1);
             Step2Ticker.Should().Be(3);

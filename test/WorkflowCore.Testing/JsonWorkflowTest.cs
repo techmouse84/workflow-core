@@ -53,10 +53,10 @@ namespace WorkflowCore.Testing
             services.AddWorkflow();
         }
 
-        public string StartWorkflow(string json, object data)
+        public string StartWorkflow(string json, object data , int? tenantId = null)
         {
             var def = DefinitionLoader.LoadDefinition(json);
-            var workflowId = Host.StartWorkflow(def.Id, data).Result;
+            var workflowId = Host.StartWorkflow(def.Id, tenantId, data).Result;
             return workflowId;
         }
 

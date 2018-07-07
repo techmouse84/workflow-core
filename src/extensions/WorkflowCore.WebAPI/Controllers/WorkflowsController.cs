@@ -45,10 +45,10 @@ namespace WorkflowCore.WebAPI.Controllers
 
         [HttpPost("{id}")]
         [HttpPost("{id}/{version}")]        
-        public async Task<IActionResult> Post(string id, int? version, [FromBody]JObject data)
+        public async Task<IActionResult> Post(string id, int? tenantId, int? version, [FromBody]JObject data)
         {
             string workflowId = null;            
-            var def = _registry.GetDefinition(id, version);
+            var def = _registry.GetDefinition(id, tenantId, version);
             if (def == null)
                 return BadRequest(String.Format("Workflow defintion {0} for version {1} not found", id, version));
             if ((data != null) && (def.DataType != null))

@@ -25,6 +25,7 @@ namespace WorkflowCore.IntegrationTests.Scenarios
             public static bool CompensationFired = false;
 
             public string Id => "CompensationWorkflow";
+            public int? TenantId => null;
             public int Version => 1;
             public void Build(IWorkflowBuilder<MyDataClass> builder)
             {

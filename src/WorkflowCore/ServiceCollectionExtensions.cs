@@ -18,35 +18,35 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static void AddWorkflow(this IServiceCollection services, Action<WorkflowOptions> setupAction = null)
         {
-            //if (services.Any(x => x.ServiceType == typeof(WorkflowOptions)))
-            //    throw new InvalidOperationException("Workflow services already registered");
-            
-            //var options = new WorkflowOptions(services);
-            //setupAction?.Invoke(options);
-            
-            //services.AddTransient<IPersistenceProvider>(options.PersistanceFactory);
-            //services.AddSingleton<IQueueProvider>(options.QueueFactory);
-            //services.AddSingleton<IDistributedLockProvider>(options.LockFactory);
-            //services.AddSingleton<IWorkflowRegistry, WorkflowRegistry>();
-            //services.AddSingleton<WorkflowOptions>(options);
+            if (services.Any(x => x.ServiceType == typeof(WorkflowOptions)))
+                throw new InvalidOperationException("Workflow services already registered");
 
-            //services.AddTransient<IBackgroundTask, WorkflowConsumer>();
-            //services.AddTransient<IBackgroundTask, EventConsumer>();
-            //services.AddTransient<IBackgroundTask, RunnablePoller>();
+            var options = new WorkflowOptions(services);
+            setupAction?.Invoke(options);
 
-            //services.AddSingleton<IWorkflowController, WorkflowController>();
-            //services.AddSingleton<IWorkflowHost, WorkflowHost>();
-            //services.AddTransient<IWorkflowExecutor, WorkflowExecutor>();
-            //services.AddTransient<IWorkflowBuilder, WorkflowBuilder>();
-            //services.AddTransient<IExecutionResultProcessor, ExecutionResultProcessor>();
-            //services.AddTransient<IExecutionPointerFactory, ExecutionPointerFactory>();
+            services.AddTransient<IPersistenceProvider>(options.PersistanceFactory);
+            services.AddSingleton<IQueueProvider>(options.QueueFactory);
+            services.AddSingleton<IDistributedLockProvider>(options.LockFactory);
+            services.AddSingleton<IWorkflowRegistry, WorkflowRegistry>();
+            services.AddSingleton<WorkflowOptions>(options);
 
-            //services.AddTransient<IPooledObjectPolicy<IPersistenceProvider>, InjectedObjectPoolPolicy<IPersistenceProvider>>();
-            //services.AddTransient<IPooledObjectPolicy<IWorkflowExecutor>, InjectedObjectPoolPolicy<IWorkflowExecutor>>();
+            services.AddTransient<IBackgroundTask, WorkflowConsumer>();
+            services.AddTransient<IBackgroundTask, EventConsumer>();
+            services.AddTransient<IBackgroundTask, RunnablePoller>();
 
-            //services.AddTransient<IDefinitionLoader, DefinitionLoader>();
+            services.AddSingleton<IWorkflowController, WorkflowController>();
+            services.AddSingleton<IWorkflowHost, WorkflowHost>();
+            services.AddTransient<IWorkflowExecutor, WorkflowExecutor>();
+            services.AddTransient<IWorkflowBuilder, WorkflowBuilder>();
+            services.AddTransient<IExecutionResultProcessor, ExecutionResultProcessor>();
+            services.AddTransient<IExecutionPointerFactory, ExecutionPointerFactory>();
 
-            //services.AddTransient<Foreach>();
+            services.AddTransient<IPooledObjectPolicy<IPersistenceProvider>, InjectedObjectPoolPolicy<IPersistenceProvider>>();
+            services.AddTransient<IPooledObjectPolicy<IWorkflowExecutor>, InjectedObjectPoolPolicy<IWorkflowExecutor>>();
+
+            services.AddTransient<IDefinitionLoader, DefinitionLoader>();
+
+            services.AddTransient<Foreach>();
         }
     }
 }

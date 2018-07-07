@@ -32,6 +32,7 @@ namespace WorkflowCore.IntegrationTests.Scenarios
 
             public string Id => "SagaWorkflow";
             public int Version => 1;
+            public int? TenantId => null;
             public void Build(IWorkflowBuilder<MyDataClass> builder)
             {
                 builder

@@ -45,6 +45,7 @@ namespace WorkflowCore.IntegrationTests.Scenarios
         {
             public string Id => "OutcomeFork";
             public int Version => 1;
+            public int? TenantId => null;
             public void Build(IWorkflowBuilder<Object> builder)
             {
                 var taskA = builder.StartWith<TaskA>();
@@ -61,7 +62,7 @@ namespace WorkflowCore.IntegrationTests.Scenarios
         [Fact]
         public void Scenario()
         {
-            var workflowId = Host.StartWorkflow("OutcomeFork").Result;
+            var workflowId = Host.StartWorkflow("OutcomeFork", null).Result;
             var instance = PersistenceProvider.GetWorkflowInstance(workflowId).Result;
             int counter = 0;
             while ((instance.Status == WorkflowStatus.Runnable) && (counter < 300))

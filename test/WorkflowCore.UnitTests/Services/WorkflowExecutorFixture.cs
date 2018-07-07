@@ -12,6 +12,7 @@ using Xunit;
 using WorkflowCore.Primitives;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Abp.Timing;
 
 namespace WorkflowCore.UnitTests.Services
 {
@@ -23,7 +24,7 @@ namespace WorkflowCore.UnitTests.Services
         protected IWorkflowRegistry Registry;
         protected IExecutionResultProcessor ResultProcesser;
         protected IServiceProvider ServiceProvider;
-        protected IDateTimeProvider DateTimeProvider;
+        protected IClockProvider DateTimeProvider;
         protected WorkflowOptions Options;
 
         public WorkflowExecutorFixture()
@@ -33,9 +34,9 @@ namespace WorkflowCore.UnitTests.Services
             ServiceProvider = A.Fake<IServiceProvider>();
             Registry = A.Fake<IWorkflowRegistry>();
             ResultProcesser = A.Fake<IExecutionResultProcessor>();
-            DateTimeProvider = A.Fake<IDateTimeProvider>();
+            DateTimeProvider = A.Fake<IClockProvider>();
 
-            Options = new WorkflowOptions(A.Fake<IServiceCollection>());
+            Options = new WorkflowOptions();
 
             A.CallTo(() => DateTimeProvider.Now).Returns(DateTime.Now);
 
@@ -43,7 +44,7 @@ namespace WorkflowCore.UnitTests.Services
             var loggerFactory = new LoggerFactory();
             loggerFactory.AddConsole(LogLevel.Debug);            
 
-            Subject = new WorkflowExecutor(Registry, ServiceProvider, DateTimeProvider, ResultProcesser, Options, loggerFactory);
+            Subject = new WorkflowExecutor(Registry, ServiceProvider, ResultProcesser, Options, loggerFactory);
         }
 
         [Fact(DisplayName = "Should execute active step")]
@@ -284,9 +285,9 @@ namespace WorkflowCore.UnitTests.Services
         }
 
 
-        private void Given1StepWorkflow(WorkflowStep step1, string id, int version)
+        private void Given1StepWorkflow(WorkflowStep step1, string id, int version, int? tenantId = null)
         {
-            A.CallTo(() => Registry.GetDefinition(id, version)).Returns(new WorkflowDefinition()
+            A.CallTo(() => Registry.GetDefinition(id, tenantId, version)).Returns(new WorkflowDefinition()
             {
                 Id = id,
                 Version = version,

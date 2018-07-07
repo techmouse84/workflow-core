@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
@@ -16,13 +15,13 @@ namespace WorkflowCore.LockProviders.SqlServer
 
         private readonly string _connectionString;
         private readonly ILogger _logger;
-        private readonly Dictionary<string, SqlConnection> _locks = new Dictionary<string, SqlConnection>();
+        private readonly Dictionary<string, System.Data.SqlClient.SqlConnection> _locks = new Dictionary<string, System.Data.SqlClient.SqlConnection>();
         private readonly AutoResetEvent _mutex = new AutoResetEvent(true);
 
         public SqlLockProvider(string connectionString, ILoggerFactory logFactory)
         {
             _logger = logFactory.CreateLogger<SqlLockProvider>();
-            var csb = new SqlConnectionStringBuilder(connectionString);
+            var csb = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString);
             csb.Pooling = true;
             csb.ApplicationName = "Workflow Core Lock Manager";
             
@@ -36,7 +35,7 @@ namespace WorkflowCore.LockProviders.SqlServer
             {
                 try
                 {
-                    var connection = new SqlConnection(_connectionString);
+                    var connection = new System.Data.SqlClient.SqlConnection(_connectionString);
                     await connection.OpenAsync(cancellationToken);
                     try
                     {
@@ -98,7 +97,7 @@ namespace WorkflowCore.LockProviders.SqlServer
             {
                 try
                 {
-                    SqlConnection connection = null;
+                    System.Data.SqlClient.SqlConnection connection = null;
                     connection = _locks[Id];
 
                     if (connection == null)

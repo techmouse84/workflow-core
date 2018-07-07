@@ -21,6 +21,7 @@ namespace WorkflowCore.IntegrationTests.Scenarios
         {
             public static bool Event1Fired = false;
             public static bool Event2Fired = false;
+            public int? TenantId => null;
 
             public string Id => "CancelledEventWorkflow";
             public int Version => 1;

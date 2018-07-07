@@ -47,5 +47,13 @@ namespace WorkflowCore
             IocManager.Register<Foreach>();
 
         }
+
+        public override void PostInitialize()
+        {
+            base.PostInitialize();
+            var host = IocManager.Resolve<IWorkflowHost>();
+
+            host.Start();
+        }
     }
 }

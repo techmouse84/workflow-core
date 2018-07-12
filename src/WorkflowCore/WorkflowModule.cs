@@ -51,9 +51,6 @@ namespace WorkflowCore
         public override void PostInitialize()
         {
             base.PostInitialize();
-            var host = IocManager.Resolve<IWorkflowHost>();
-
-            host.Start();
         }
     }
 }

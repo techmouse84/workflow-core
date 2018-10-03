@@ -20,14 +20,21 @@ namespace WorkflowCore
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
             
-            IocManager.Register<IQueueProvider, SingleNodeQueueProvider>(DependencyLifeStyle.Singleton);
-            IocManager.Register<IPersistenceProvider, MemoryPersistenceProvider>(DependencyLifeStyle.Transient);
-            IocManager.Register<IDistributedLockProvider, SingleNodeLockProvider>(DependencyLifeStyle.Singleton);
 
-            IocManager.Register<IWorkflowRegistry, WorkflowRegistry>();
+        }
+
+        public override void PostInitialize()
+        {
+            base.PostInitialize();
+
+            IocManager.RegisterIfNot<IQueueProvider, SingleNodeQueueProvider>(DependencyLifeStyle.Singleton);
+            IocManager.RegisterIfNot<IPersistenceProvider, MemoryPersistenceProvider>(DependencyLifeStyle.Singleton);
+            IocManager.RegisterIfNot<IDistributedLockProvider, SingleNodeLockProvider>(DependencyLifeStyle.Singleton);
+
+            IocManager.RegisterIfNot<IWorkflowRegistry, WorkflowRegistry>();
 
             IocManager.Register<WorkflowOptions>();
-            
+
             IocManager.Register<IBackgroundTask, WorkflowConsumer>(DependencyLifeStyle.Transient);
             IocManager.Register<IBackgroundTask, EventConsumer>(DependencyLifeStyle.Transient);
             IocManager.Register<IBackgroundTask, RunnablePoller>(DependencyLifeStyle.Transient);
@@ -42,15 +49,9 @@ namespace WorkflowCore
             IocManager.Register<IPooledObjectPolicy<IPersistenceProvider>, InjectedObjectPoolPolicy<IPersistenceProvider>>(DependencyLifeStyle.Transient);
             IocManager.Register<IPooledObjectPolicy<IWorkflowExecutor>, InjectedObjectPoolPolicy<IWorkflowExecutor>>(DependencyLifeStyle.Transient);
 
-            IocManager.Register<IDefinitionLoader, DefinitionLoader>();
+            IocManager.RegisterIfNot<IDefinitionLoader, DefinitionLoader>();
 
             IocManager.Register<Foreach>();
-
-        }
-
-        public override void PostInitialize()
-        {
-            base.PostInitialize();
         }
     }
 }

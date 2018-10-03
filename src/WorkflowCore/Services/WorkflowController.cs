@@ -164,9 +164,14 @@ namespace WorkflowCore.Services
             try
             {
                 var wf = await _persistenceStore.GetWorkflowInstance(workflowId);
-                wf.Status = WorkflowStatus.Terminated;
-                await _persistenceStore.PersistWorkflow(wf);
-                return true;
+                if (wf.Status != WorkflowStatus.Terminated && wf.Status != WorkflowStatus.Complete)
+                {
+                    wf.Status = WorkflowStatus.Terminated;
+                    await _persistenceStore.PersistWorkflow(wf);
+                    return true;
+                }
+
+                return false;
             }
             finally
             {

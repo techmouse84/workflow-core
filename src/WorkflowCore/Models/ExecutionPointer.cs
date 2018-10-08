@@ -22,6 +22,8 @@ namespace WorkflowCore.Models
 
         public string EventName { get; set; }
 
+        public long? EventUserId { get; set; }
+
         public string EventKey { get; set; }
 
         public bool EventPublished { get; set; }

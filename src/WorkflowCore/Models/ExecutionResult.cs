@@ -15,6 +15,8 @@ namespace WorkflowCore.Models
 
         public string EventName { get; set; }
 
+        public long EventUserId { get; set; }
+
         public string EventKey { get; set; }
 
         public DateTime EventAsOf { get; set; }
@@ -77,7 +79,6 @@ namespace WorkflowCore.Models
                 PersistenceData = persistenceData
             };
         }
-
         public static ExecutionResult WaitForEvent(string eventName, string eventKey, DateTime effectiveDate)
         {
             return new ExecutionResult()
@@ -85,7 +86,18 @@ namespace WorkflowCore.Models
                 Proceed = false,
                 EventName = eventName,
                 EventKey = eventKey,
-                EventAsOf = effectiveDate.ToUniversalTime()
+                EventAsOf = effectiveDate.ToUniversalTime(),
+            };
+        }
+        public static ExecutionResult WaitForEvent(string eventName, string eventKey, DateTime effectiveDate, long userId)
+        {
+            return new ExecutionResult()
+            {
+                Proceed = false,
+                EventName = eventName,
+                EventKey = eventKey,
+                EventAsOf = effectiveDate.ToUniversalTime(),
+                EventUserId = userId
             };
         }
     }

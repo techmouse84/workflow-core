@@ -31,6 +31,8 @@ namespace WorkflowCore.Interface
 
         Task<Event> GetEvent(string id);
 
+        Task<IEnumerable<string>> GetWorkflowInstanceIdsByUserId(long id, int? tenantId);
+
         Task<IEnumerable<string>> GetRunnableEvents(DateTime asAt);
         
         Task<IEnumerable<string>> GetEvents(string eventName, string eventKey, DateTime? asOf, bool? runnable = null);

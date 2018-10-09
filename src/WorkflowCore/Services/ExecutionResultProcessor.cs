@@ -35,6 +35,7 @@ namespace WorkflowCore.Services
             {
                 pointer.EventName = result.EventName;
                 pointer.EventKey = result.EventKey;
+                pointer.EventUserId = result.EventUserId;
                 pointer.Active = false;
                 pointer.Status = PointerStatus.WaitingForEvent;
 

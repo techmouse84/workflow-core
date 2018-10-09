@@ -193,6 +193,11 @@ namespace WorkflowCore.Services
                 _errors.AddRange(errors);
             }
         }
+
+        public Task<IEnumerable<string>> GetWorkflowInstanceIdsByUserId(long id, int? tenantId)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously

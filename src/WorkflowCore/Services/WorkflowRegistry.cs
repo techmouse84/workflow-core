@@ -17,6 +17,11 @@ namespace WorkflowCore.Services
             _serviceProvider = serviceProvider;
         }
 
+        public void ClearRegistry()
+        {
+            throw new NotImplementedException();
+        }
+
         public WorkflowDefinition GetDefinition(string workflowId, int? tenantId, int? version)
         {
             if (version.HasValue)

@@ -21,6 +21,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
 
         private readonly bool _canMigrateDb;
         private readonly bool _canCreateDb;
+        private readonly bool _canEnableBroker;
 
         private readonly IQueueConfigProvider _config;
         private readonly ISqlServerQueueProviderMigrator _migrator;
@@ -37,6 +38,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
             _connectionString = opt.ConnectionString;
             _canMigrateDb = opt.CanMigrateDb;
             _canCreateDb = opt.CanCreateDb;
+            _canEnableBroker = opt.CanEnableBroker;
 
             IsDequeueBlocking = true;
 
@@ -63,6 +65,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
         {
             if (_canCreateDb) _migrator.CreateDb();
             if (_canMigrateDb) _migrator.MigrateDb();
+            if (_canEnableBroker) _migrator.EnableBroker();
         }
 
         public async Task Stop()

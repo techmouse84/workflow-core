@@ -12,5 +12,6 @@ namespace WorkflowCore.QueueProviders.SqlServer
         public string ConnectionString { get; set; }        
         public bool CanMigrateDb { get; set; }
         public bool CanCreateDb { get; set; }
+        public bool CanEnableBroker { get; set; }
     }
 }

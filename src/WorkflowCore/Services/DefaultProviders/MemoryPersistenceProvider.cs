@@ -198,6 +198,11 @@ namespace WorkflowCore.Services
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<dynamic> GetListOfWorkflowEvent(List<string> listOfWorkflowIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously

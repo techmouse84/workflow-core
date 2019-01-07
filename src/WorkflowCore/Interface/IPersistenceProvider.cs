@@ -33,8 +33,10 @@ namespace WorkflowCore.Interface
 
         Task<IEnumerable<string>> GetWorkflowInstanceIdsByUserId(long id, int? tenantId);
 
+        IEnumerable<dynamic> GetListOfWorkflowEvent(List<string> listOfWorkflowIds);
+
         Task<IEnumerable<string>> GetRunnableEvents(DateTime asAt);
-        
+
         Task<IEnumerable<string>> GetEvents(string eventName, string eventKey, DateTime? asOf, bool? runnable = null);
 
         Task MarkEventProcessed(string id);

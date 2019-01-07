@@ -27,7 +27,6 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
             _sqlCommandExecutor = sqlCommandExecutor;
         }
 
-
         #region Migrate
 
         public void MigrateDb()
@@ -144,6 +143,15 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
             {
                 cn.Close();
             }            
+        }
+
+        public void EnableBroker()
+        {
+            var builder = new SqlConnectionStringBuilder(_connectionString);
+            var masterBuilder = new SqlConnectionStringBuilder(_connectionString);
+            masterBuilder.InitialCatalog = "master";
+
+            var masterCnStr = masterBuilder.ToString();
 
             EnableBroker(masterCnStr, builder.InitialCatalog);
         }
@@ -153,21 +161,14 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
             var cn = new SqlConnection(masterCn);
             cn.Open();
 
-            var isBrokerEnabled = _sqlCommandExecutor.ExecuteScalar<bool>(cn, null, @"select is_broker_enabled from sys.databases where name = @name", new SqlParameter("@name", db));
-
-            if (isBrokerEnabled)
-                return;
-
-            var tx = cn.BeginTransaction();
             try
             {
-                _sqlCommandExecutor.ExecuteCommand(cn, tx, $"ALTER DATABASE [{db}] SET ENABLE_BROKER;");
-                tx.Commit();
-            }
-            catch
-            {
-                tx.Rollback();
-                throw;
+                var isBrokerEnabled = _sqlCommandExecutor.ExecuteScalar<bool>(cn, null, @"select is_broker_enabled from sys.databases where name = @name", new SqlParameter("@name", db));
+
+                if (isBrokerEnabled)
+                    return;
+
+                _sqlCommandExecutor.ExecuteCommand(cn,null, $"ALTER DATABASE [{db}] SET ENABLE_BROKER with rollback immediate;");
             }
             finally
             {

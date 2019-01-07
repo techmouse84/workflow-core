@@ -8,5 +8,6 @@ namespace WorkflowCore.QueueProviders.SqlServer.Interfaces
     {
         void MigrateDb();
         void CreateDb();
+        void EnableBroker();
     }
 }

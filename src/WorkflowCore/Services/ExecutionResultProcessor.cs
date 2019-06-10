@@ -85,6 +85,11 @@ namespace WorkflowCore.Services
             switch (errorOption)
             {
                 case WorkflowErrorHandling.Retry:
+                    if (pointer.RetryCount >= def.DefaultErrorRetryLimit)
+                    {
+                        workflow.Status = WorkflowStatus.Suspended;
+                        break;
+                    }
                     pointer.RetryCount++;
                     pointer.SleepUntil = Clock.Now.ToUniversalTime().Add(step.RetryInterval ?? def.DefaultErrorRetryInterval ?? _options.ErrorRetryInterval);
                     step.PrimeForRetry(pointer);

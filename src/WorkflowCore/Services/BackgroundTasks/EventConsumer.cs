@@ -16,7 +16,7 @@ namespace WorkflowCore.Services.BackgroundTasks
 
         protected override QueueType Queue => QueueType.Event;
 
-        public EventConsumer(IPersistenceProvider persistenceStore, IQueueProvider queueProvider, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IWorkflowRegistry registry, IDistributedLockProvider lockProvider, WorkflowOptions options)
+        public EventConsumer(IPersistenceProvider persistenceStore, IQueueProvider queueProvider, ILoggerFactory loggerFactory, IDistributedLockProvider lockProvider, WorkflowOptions options)
             : base(queueProvider, loggerFactory, options)
         {
             _persistenceStore = persistenceStore;

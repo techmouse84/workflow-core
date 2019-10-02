@@ -87,7 +87,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
         /// <param name="id"></param>
         /// <param name="queue"></param>
         /// <returns></returns>
-        public async Task QueueWork(string id, QueueType queue)
+        public Task QueueWork(string id, QueueType queue)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentNullException(nameof(id), "Param id must not be null");
@@ -110,6 +110,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
             {
                 cn.Close();
             }
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
@@ -119,7 +120,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
         /// <param name="queue"></param>
         /// <param name="cancellationToken">cancellationToken</param>
         /// <returns>Next id from queue, null if no message arrives in one second.</returns>
-        public async Task<string> DequeueWork(QueueType queue, CancellationToken cancellationToken)
+        public Task<string> DequeueWork(QueueType queue, CancellationToken cancellationToken)
         {
             SqlConnection cn = new SqlConnection(_connectionString);
             try
@@ -128,7 +129,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
                 var par = _config.GetByQueue(queue);                
                 var sql = _dequeueWorkCommand.Replace("{queueName}", par.QueueName);
                 var msg = _sqlCommandExecutor.ExecuteScalar<object>(cn, null, sql);
-                return msg is DBNull ? null : (string)msg;
+                return Task.FromResult( msg is DBNull ? null : (string)msg );
                 
             }
             finally

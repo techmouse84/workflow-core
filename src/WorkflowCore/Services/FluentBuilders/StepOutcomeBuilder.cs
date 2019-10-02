@@ -44,8 +44,10 @@ namespace WorkflowCore.Services
 
         public IStepBuilder<TData, InlineStepBody> Then(Func<IStepExecutionContext, ExecutionResult> body)
         {
-            WorkflowStepInline newStep = new WorkflowStepInline();
-            newStep.Body = body;
+            WorkflowStepInline newStep = new WorkflowStepInline
+            {
+                Body = body
+            };
             WorkflowBuilder.AddStep(newStep);
             var stepBuilder = new StepBuilder<TData, InlineStepBody>(WorkflowBuilder, newStep);
             Outcome.NextStep = newStep.Id;

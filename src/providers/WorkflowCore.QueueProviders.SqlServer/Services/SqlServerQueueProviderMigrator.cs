@@ -116,8 +116,10 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
         public void CreateDb()
         {
             var builder = new SqlConnectionStringBuilder(_connectionString);
-            var masterBuilder = new SqlConnectionStringBuilder(_connectionString);
-            masterBuilder.InitialCatalog = "master";
+            var masterBuilder = new SqlConnectionStringBuilder(_connectionString)
+            {
+                InitialCatalog = "master"
+            };
 
             var masterCnStr = masterBuilder.ToString();
 
@@ -148,8 +150,10 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
         public void EnableBroker()
         {
             var builder = new SqlConnectionStringBuilder(_connectionString);
-            var masterBuilder = new SqlConnectionStringBuilder(_connectionString);
-            masterBuilder.InitialCatalog = "master";
+            var masterBuilder = new SqlConnectionStringBuilder(_connectionString)
+            {
+                InitialCatalog = "master"
+            };
 
             var masterCnStr = masterBuilder.ToString();
 

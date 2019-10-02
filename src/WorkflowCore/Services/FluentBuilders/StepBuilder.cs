@@ -53,9 +53,11 @@ namespace WorkflowCore.Services
         }
 
         public IStepBuilder<TData, InlineStepBody> Then(Func<IStepExecutionContext, ExecutionResult> body)
-        {            
-            WorkflowStepInline newStep = new WorkflowStepInline();
-            newStep.Body = body;
+        {
+            WorkflowStepInline newStep = new WorkflowStepInline
+            {
+                Body = body
+            };
             WorkflowBuilder.AddStep(newStep);
             var stepBuilder = new StepBuilder<TData, InlineStepBody>(WorkflowBuilder, newStep);
             Step.Outcomes.Add(new StepOutcome() { NextStep = newStep.Id });
@@ -74,9 +76,11 @@ namespace WorkflowCore.Services
 
         public IStepOutcomeBuilder<TData> When(object outcomeValue, string label = null)
         {
-            StepOutcome result = new StepOutcome();
-            result.Value = x => outcomeValue;
-            result.Label = label;
+            StepOutcome result = new StepOutcome
+            {
+                Value = x => outcomeValue,
+                Label = label
+            };
             Step.Outcomes.Add(result);
             var outcomeBuilder = new StepOutcomeBuilder<TData>(WorkflowBuilder, result);
             return outcomeBuilder;
@@ -84,27 +88,33 @@ namespace WorkflowCore.Services
 
         public IStepBuilder<TData, TStepBody> Input<TInput>(Expression<Func<TStepBody, TInput>> stepProperty, Expression<Func<TData, TInput>> value)
         {
-            var mapping = new DataMapping();            
-            mapping.Source = value;
-            mapping.Target = stepProperty;
+            var mapping = new DataMapping
+            {
+                Source = value,
+                Target = stepProperty
+            };
             Step.Inputs.Add(mapping);
             return this;
         }
 
         public IStepBuilder<TData, TStepBody> Input<TInput>(Expression<Func<TStepBody, TInput>> stepProperty, Expression<Func<TData, IStepExecutionContext, TInput>> value)
         {
-            var mapping = new DataMapping();
-            mapping.Source = value;
-            mapping.Target = stepProperty;
+            var mapping = new DataMapping
+            {
+                Source = value,
+                Target = stepProperty
+            };
             Step.Inputs.Add(mapping);
             return this;
         }
 
         public IStepBuilder<TData, TStepBody> Output<TOutput>(Expression<Func<TData, TOutput>> dataProperty, Expression<Func<TStepBody, object>> value)
         {
-            var mapping = new DataMapping();
-            mapping.Source = value;
-            mapping.Target = dataProperty;
+            var mapping = new DataMapping
+            {
+                Source = value,
+                Target = dataProperty
+            };
             Step.Outputs.Add(mapping);
             return this;
         }
@@ -419,8 +429,10 @@ namespace WorkflowCore.Services
 
         public IStepBuilder<TData, TStepBody> CompensateWith(Func<IStepExecutionContext, ExecutionResult> body)
         {
-            WorkflowStepInline newStep = new WorkflowStepInline();
-            newStep.Body = body;
+            WorkflowStepInline newStep = new WorkflowStepInline
+            {
+                Body = body
+            };
             WorkflowBuilder.AddStep(newStep);
             var stepBuilder = new StepBuilder<TData, InlineStepBody>(WorkflowBuilder, newStep);
             Step.CompensationStepId = newStep.Id;

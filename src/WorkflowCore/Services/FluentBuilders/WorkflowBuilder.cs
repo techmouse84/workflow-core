@@ -25,13 +25,15 @@ namespace WorkflowCore.Services
 
         public virtual WorkflowDefinition Build(string id, int? tenantId, int version)
         {
-            WorkflowDefinition result = new WorkflowDefinition();
-            result.Id = id;
-            result.TenantId = tenantId;
-            result.Version = version;
-            result.Steps = this.Steps;
-            result.DefaultErrorBehavior = DefaultErrorBehavior;
-            result.DefaultErrorRetryInterval = DefaultErrorRetryInterval;
+            WorkflowDefinition result = new WorkflowDefinition
+            {
+                Id = id,
+                TenantId = tenantId,
+                Version = version,
+                Steps = this.Steps,
+                DefaultErrorBehavior = DefaultErrorBehavior,
+                DefaultErrorRetryInterval = DefaultErrorRetryInterval
+            };
             return result;
         }
 
@@ -76,8 +78,10 @@ namespace WorkflowCore.Services
 
         public IStepBuilder<TData, InlineStepBody> StartWith(Func<IStepExecutionContext, ExecutionResult> body)
         {
-            WorkflowStepInline newStep = new WorkflowStepInline();
-            newStep.Body = body;
+            WorkflowStepInline newStep = new WorkflowStepInline
+            {
+                Body = body
+            };
             var stepBuilder = new StepBuilder<TData, InlineStepBody>(this, newStep);
             AddStep(newStep);
             return stepBuilder;

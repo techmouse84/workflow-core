@@ -21,10 +21,12 @@ namespace WorkflowCore.LockProviders.SqlServer
         public SqlLockProvider(string connectionString, ILoggerFactory logFactory)
         {
             _logger = logFactory.CreateLogger<SqlLockProvider>();
-            var csb = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString);
-            csb.Pooling = true;
-            csb.ApplicationName = "Workflow Core Lock Manager";
-            
+            var csb = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString)
+            {
+                Pooling = true,
+                ApplicationName = "Workflow Core Lock Manager"
+            };
+
             _connectionString = csb.ToString();
         }
 
@@ -132,12 +134,14 @@ namespace WorkflowCore.LockProviders.SqlServer
             }
         }
 
-        public async Task Start()
-        {         
+        public Task Start()
+        {
+            return Task.CompletedTask;
         }
 
-        public async Task Stop()
+        public Task Stop()
         {
+            return Task.CompletedTask;
         }
     }
 }

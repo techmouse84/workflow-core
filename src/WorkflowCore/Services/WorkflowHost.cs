@@ -131,7 +131,7 @@ namespace WorkflowCore.Services
         public void Dispose()
         {
             if (!_shutdown)
-                Stop();
+                Abp.Threading.AsyncHelper.RunSync(async () => await Stop());
         }
     }
 }

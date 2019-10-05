@@ -3,7 +3,6 @@
 using System;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -126,11 +125,11 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
             try
             {
                 cn.Open();
-                var par = _config.GetByQueue(queue);                
+                var par = _config.GetByQueue(queue);
                 var sql = _dequeueWorkCommand.Replace("{queueName}", par.QueueName);
                 var msg = _sqlCommandExecutor.ExecuteScalar<object>(cn, null, sql);
-                return Task.FromResult( msg is DBNull ? null : (string)msg );
-                
+                return Task.FromResult(msg is DBNull ? null : (string)msg);
+
             }
             finally
             {

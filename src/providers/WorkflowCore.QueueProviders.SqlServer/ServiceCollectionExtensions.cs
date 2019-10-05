@@ -1,8 +1,5 @@
 ﻿#region using
 
-using System;
-using Microsoft.Extensions.DependencyInjection;
-
 using WorkflowCore.Models;
 using WorkflowCore.QueueProviders.SqlServer;
 using WorkflowCore.QueueProviders.SqlServer.Interfaces;
@@ -13,7 +10,7 @@ using WorkflowCore.QueueProviders.SqlServer.Services;
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
-    {        
+    {
         /// <summary>
         ///     Use SQL Server as a queue provider
         /// </summary>

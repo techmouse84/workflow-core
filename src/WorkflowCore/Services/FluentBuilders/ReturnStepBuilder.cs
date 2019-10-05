@@ -20,7 +20,7 @@ namespace WorkflowCore.Services
             Step = step;
             _referenceBuilder = referenceBuilder;
         }
-        
+
         public IStepBuilder<TData, TParentStep> Do(Action<IWorkflowBuilder<TData>> builder)
         {
             builder.Invoke(WorkflowBuilder);

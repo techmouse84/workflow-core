@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 
@@ -36,7 +35,7 @@ namespace WorkflowCore.Services
                 StepName = def.Steps.First(x => x.Id == outcomeTarget.NextStep).Name,
                 EventUserId = pointer.EventUserId,
                 Scope = new Stack<string>(pointer.Scope)
-            };            
+            };
         }
 
         public ExecutionPointer BuildChildPointer(WorkflowDefinition def, ExecutionPointer pointer, int childDefinitionId, object branch)
@@ -57,7 +56,7 @@ namespace WorkflowCore.Services
                 StepName = def.Steps.First(x => x.Id == childDefinitionId).Name,
                 EventUserId = pointer.EventUserId,
                 Scope = childScope
-            };            
+            };
         }
 
         public ExecutionPointer BuildCompensationPointer(WorkflowDefinition def, ExecutionPointer pointer, ExecutionPointer exceptionPointer, int compensationStepId)

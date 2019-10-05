@@ -1,7 +1,6 @@
 ﻿#region using
 
 using System;
-using System.Linq;
 using WorkflowCore.Interface;
 using WorkflowCore.QueueProviders.SqlServer.Interfaces;
 using WorkflowCore.QueueProviders.SqlServer.Models;
@@ -17,9 +16,9 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
     {
         private readonly QueueConfig _workflowQueueConfig;
         private readonly QueueConfig _eventQueueConfig;
-                
+
         public QueueConfigProvider()
-        {   
+        {
             _workflowQueueConfig = new QueueConfig("workflow");
             _eventQueueConfig = new QueueConfig("event");
         }

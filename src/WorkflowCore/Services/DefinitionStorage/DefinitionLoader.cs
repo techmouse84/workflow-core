@@ -4,14 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
+using WorkflowCore.Exceptions;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
-using WorkflowCore.Primitives;
-using WorkflowCore.Models.DefinitionStorage;
 using WorkflowCore.Models.DefinitionStorage.v1;
-using WorkflowCore.Exceptions;
+using WorkflowCore.Primitives;
 
 namespace WorkflowCore.Services.DefinitionStorage
 {
@@ -23,7 +20,7 @@ namespace WorkflowCore.Services.DefinitionStorage
         {
             _registry = registry;
         }
-                        
+
         public WorkflowDefinition LoadDefinition(string json)
         {
             var source = JsonConvert.DeserializeObject<DefinitionSourceV1>(json);
@@ -118,7 +115,7 @@ namespace WorkflowCore.Services.DefinitionStorage
                     targetStep.Outcomes.Add(new StepOutcome() { Tag = $"{nextStep.NextStepId}" });
 
                 result.Add(targetStep);
-                
+
                 i++;
             }
 
@@ -172,7 +169,7 @@ namespace WorkflowCore.Services.DefinitionStorage
             {
                 var dataParameter = Expression.Parameter(dataType, "data");
                 var contextParameter = Expression.Parameter(typeof(IStepExecutionContext), "context");
-                var sourceExpr = DynamicExpressionParser.ParseLambda(new [] { dataParameter, contextParameter }, typeof(object), input.Value);
+                var sourceExpr = DynamicExpressionParser.ParseLambda(new[] { dataParameter, contextParameter }, typeof(object), input.Value);
                 var targetExpr = Expression.Property(Expression.Parameter(stepType), input.Key);
 
                 step.Inputs.Add(new DataMapping()

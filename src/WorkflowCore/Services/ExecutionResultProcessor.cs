@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Abp.Timing;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Abp.Timing;
-using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 
@@ -56,7 +56,7 @@ namespace WorkflowCore.Services
                 pointer.Status = PointerStatus.Complete;
 
                 foreach (var outcomeTarget in step.Outcomes.Where(x => object.Equals(x.GetValue(workflow.Data), result.OutcomeValue) || x.GetValue(workflow.Data) == null))
-                {                    
+                {
                     workflow.ExecutionPointers.Add(_pointerFactory.BuildNextPointer(def, pointer, outcomeTarget));
                 }
             }
@@ -65,16 +65,16 @@ namespace WorkflowCore.Services
                 foreach (var branch in result.BranchValues)
                 {
                     foreach (var childDefId in step.Children)
-                    {   
-                        workflow.ExecutionPointers.Add(_pointerFactory.BuildChildPointer(def, pointer, childDefId, branch));                        
+                    {
+                        workflow.ExecutionPointers.Add(_pointerFactory.BuildChildPointer(def, pointer, childDefId, branch));
                     }
                 }
             }
         }
 
         public void HandleStepException(WorkflowInstance workflow, WorkflowDefinition def, ExecutionPointer pointer, WorkflowStep step)
-        {            
-            pointer.Status = PointerStatus.Failed;            
+        {
+            pointer.Status = PointerStatus.Failed;
             var compensatingStepId = FindScopeCompensationStepId(workflow, def, pointer);
             var errorOption = (step.ErrorBehavior ?? (compensatingStepId.HasValue ? WorkflowErrorHandling.Compensate : def.DefaultErrorBehavior));
             SelectErrorStrategy(errorOption, workflow, def, pointer, step);
@@ -105,9 +105,9 @@ namespace WorkflowCore.Services
                     break;
             }
         }
-        
+
         private void Compensate(WorkflowInstance workflow, WorkflowDefinition def, ExecutionPointer exceptionPointer)
-        {            
+        {
             var scope = new Stack<string>(exceptionPointer.Scope);
             scope.Push(exceptionPointer.Id);
 
@@ -147,7 +147,7 @@ namespace WorkflowCore.Services
 
                     var compensationPointer = _pointerFactory.BuildCompensationPointer(def, pointer, exceptionPointer, step.CompensationStepId.Value);
                     workflow.ExecutionPointers.Add(compensationPointer);
-                    
+
                     if (resume)
                     {
                         foreach (var outcomeTarget in step.Outcomes.Where(x => x.GetValue(workflow.Data) == null))

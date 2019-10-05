@@ -8,7 +8,7 @@ using WorkflowCore.Models;
 
 namespace WorkflowCore.Services
 {
-    #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
     /// <summary>
     /// In-memory implementation of IPersistenceProvider for demo and testing purposes
@@ -118,7 +118,7 @@ namespace WorkflowCore.Services
         }
 
         public void EnsureStoreExists()
-        {            
+        {
         }
 
         public async Task<string> CreateEvent(Event newEvent)
@@ -130,7 +130,7 @@ namespace WorkflowCore.Services
                 return newEvent.Id;
             }
         }
-        
+
         public async Task MarkEventProcessed(string id)
         {
             lock (_events)
@@ -167,8 +167,8 @@ namespace WorkflowCore.Services
             {
                 return _events
                     .Where(x => x.EventName == eventName && x.EventKey == eventKey)
-                    .WhereIf( asOf.HasValue, x => x.EventTime >= asOf.Value)
-                    .WhereIf( runnable.HasValue, x=> x.IsProcessed == runnable.Value )
+                    .WhereIf(asOf.HasValue, x => x.EventTime >= asOf.Value)
+                    .WhereIf(runnable.HasValue, x => x.IsProcessed == runnable.Value)
                     .Select(x => x.Id)
                     .ToList();
             }
@@ -205,5 +205,5 @@ namespace WorkflowCore.Services
         }
     }
 
-    #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 }

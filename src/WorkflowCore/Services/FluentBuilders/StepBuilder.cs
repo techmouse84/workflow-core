@@ -164,7 +164,7 @@ namespace WorkflowCore.Services
             Step.Outcomes.Add(new StepOutcome() { NextStep = newStep.Id });
             return stepBuilder;
         }
-        
+
         public IStepBuilder<TData, TStep> End<TStep>(string name) where TStep : IStepBody
         {
             var ancestor = IterateParents(Step.Id, name);
@@ -245,7 +245,7 @@ namespace WorkflowCore.Services
         public IContainerStepBuilder<TData, Foreach, Foreach> ForEach(Expression<Func<TData, IEnumerable>> collection)
         {
             var newStep = new WorkflowStep<Foreach>();
-            
+
             Expression<Func<Foreach, IEnumerable>> inputExpr = (x => x.Collection);
 
             var mapping = new DataMapping()
@@ -253,10 +253,10 @@ namespace WorkflowCore.Services
                 Source = collection,
                 Target = inputExpr
             };
-            newStep.Inputs.Add(mapping);            
+            newStep.Inputs.Add(mapping);
 
             WorkflowBuilder.AddStep(newStep);
-            var stepBuilder = new StepBuilder<TData, Foreach>(WorkflowBuilder, newStep);                        
+            var stepBuilder = new StepBuilder<TData, Foreach>(WorkflowBuilder, newStep);
 
             Step.Outcomes.Add(new StepOutcome() { NextStep = newStep.Id });
 
@@ -305,7 +305,7 @@ namespace WorkflowCore.Services
 
             return stepBuilder;
         }
-        
+
         public IContainerStepBuilder<TData, When, OutcomeSwitch> When(Expression<Func<TData, object>> outcomeValue, string label = null)
         {
             var newStep = new WorkflowStep<When>();
@@ -335,7 +335,7 @@ namespace WorkflowCore.Services
             {
                 switchBuilder = (this as IStepBuilder<TData, OutcomeSwitch>);
             }
-            
+
             WorkflowBuilder.AddStep(newStep);
             var stepBuilder = new ReturnStepBuilder<TData, When, OutcomeSwitch>(WorkflowBuilder, newStep, switchBuilder);
             switchBuilder.Step.Children.Add(newStep.Id);

@@ -1,9 +1,6 @@
 ﻿#region using
 
-using System;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 using WorkflowCore.Interface;
 using WorkflowCore.QueueProviders.SqlServer.Interfaces;
@@ -11,7 +8,7 @@ using WorkflowCore.QueueProviders.SqlServer.Interfaces;
 #endregion
 
 namespace WorkflowCore.QueueProviders.SqlServer.Services
-{    
+{
 
     public class SqlServerQueueProviderMigrator : ISqlServerQueueProviderMigrator
     {
@@ -53,7 +50,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
                     CreateService(cn, tx, item.InitiatorService, item.QueueName, item.ContractName);
                     CreateService(cn, tx, item.TargetService, item.QueueName, item.ContractName);
                 }
-                
+
                 tx.Commit();
             }
             catch
@@ -74,7 +71,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
 
             if (!string.IsNullOrEmpty(existing))
                 return;
-            
+
             _sqlCommandExecutor.ExecuteCommand(cn, tx, $"CREATE SERVICE [{name}] ON QUEUE [{queueName}]([{contractName}]);");
         }
 
@@ -85,7 +82,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
 
             if (!string.IsNullOrEmpty(existing))
                 return;
-                        
+
             _sqlCommandExecutor.ExecuteCommand(cn, tx, $"CREATE QUEUE [{queueName}];");
         }
 
@@ -96,7 +93,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
 
             if (!string.IsNullOrEmpty(existing))
                 return;
-                        
+
             _sqlCommandExecutor.ExecuteCommand(cn, tx, $"CREATE CONTRACT [{contractName}] ( [{messageName}] SENT BY INITIATOR);");
         }
 
@@ -107,7 +104,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
 
             if (!string.IsNullOrEmpty(existing))
                 return;
-            
+
             _sqlCommandExecutor.ExecuteCommand(cn, tx, $"CREATE MESSAGE TYPE [{message}] VALIDATION = NONE;");
         }
 
@@ -135,7 +132,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
                 dbPresente = (found != null);
 
                 if (!dbPresente)
-                {   
+                {
                     var createCmd = cn.CreateCommand();
                     createCmd.CommandText = "create database [" + builder.InitialCatalog + "]";
                     createCmd.ExecuteNonQuery();
@@ -144,7 +141,7 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
             finally
             {
                 cn.Close();
-            }            
+            }
         }
 
         public void EnableBroker()
@@ -172,12 +169,12 @@ namespace WorkflowCore.QueueProviders.SqlServer.Services
                 if (isBrokerEnabled)
                     return;
 
-                _sqlCommandExecutor.ExecuteCommand(cn,null, $"ALTER DATABASE [{db}] SET ENABLE_BROKER with rollback immediate;");
+                _sqlCommandExecutor.ExecuteCommand(cn, null, $"ALTER DATABASE [{db}] SET ENABLE_BROKER with rollback immediate;");
             }
             finally
             {
                 cn.Close();
-            }            
+            }
         }
     }
 }

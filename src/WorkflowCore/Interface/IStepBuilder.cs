@@ -10,7 +10,7 @@ namespace WorkflowCore.Interface
         where TStepBody : IStepBody
     {
 
-        IWorkflowBuilder<TData> WorkflowBuilder { get; }        
+        IWorkflowBuilder<TData> WorkflowBuilder { get; }
 
         WorkflowStep<TStepBody> Step { get; set; }
 
@@ -105,7 +105,7 @@ namespace WorkflowCore.Interface
         /// <param name="cancelCondition">A conditon that when true will cancel this WaitFor</param>
         /// <returns></returns>
         IStepBuilder<TData, WaitFor> WaitFor(string eventName, Expression<Func<TData, IStepExecutionContext, string>> eventKey, Expression<Func<TData, DateTime>> effectiveDate = null, Expression<Func<TData, bool>> cancelCondition = null);
-        
+
         IStepBuilder<TData, TStep> End<TStep>(string name) where TStep : IStepBody;
 
         /// <summary>
@@ -213,6 +213,6 @@ namespace WorkflowCore.Interface
         /// <param name="builder"></param>
         /// <returns></returns>
         IStepBuilder<TData, TStepBody> CompensateWithSequence(Action<IWorkflowBuilder<TData>> builder);
-        
+
     }
 }

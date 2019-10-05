@@ -5,15 +5,15 @@ using WorkflowCore.Interface;
 
 namespace WorkflowCore.Services
 {
-    #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
     /// <summary>
     /// Single node in-memory implementation of IDistributedLockProvider
     /// </summary>
     public class SingleNodeLockProvider : IDistributedLockProvider
-    {   
+    {
         private List<string> _locks = new List<string>();
-     
+
         public async Task<bool> AcquireLock(string Id, CancellationToken cancellationToken)
         {
             lock (_locks)
@@ -46,5 +46,5 @@ namespace WorkflowCore.Services
 
     }
 
-    #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 }

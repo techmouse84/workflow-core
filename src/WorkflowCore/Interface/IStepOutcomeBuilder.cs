@@ -3,7 +3,7 @@ using WorkflowCore.Models;
 using WorkflowCore.Primitives;
 
 namespace WorkflowCore.Interface
-{   
+{
     public interface IStepOutcomeBuilder<TData>
     {
         IWorkflowBuilder<TData> WorkflowBuilder { get; }

@@ -5,14 +5,14 @@ using WorkflowCore.Interface;
 
 namespace WorkflowCore.Services
 {
-    #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
     /// <summary>
     /// Single node in-memory implementation of IQueueProvider
     /// </summary>
     public class SingleNodeQueueProvider : IQueueProvider
     {
-                
+
         private readonly BlockingCollection<string> _runQueue = new BlockingCollection<string>();
         private readonly BlockingCollection<string> _eventQueue = new BlockingCollection<string>();
 
@@ -40,7 +40,7 @@ namespace WorkflowCore.Services
         }
 
         public void Dispose()
-        {            
+        {
         }
 
         private BlockingCollection<string> SelectQueue(QueueType queue)
@@ -48,14 +48,14 @@ namespace WorkflowCore.Services
             switch (queue)
             {
                 case QueueType.Workflow:
-                    return _runQueue;                    
+                    return _runQueue;
                 case QueueType.Event:
                     return _eventQueue;
             }
             return null;
         }
-        
+
     }
 
-    #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 }

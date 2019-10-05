@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Abp.Timing;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading;
-using Abp.Timing;
-using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 
@@ -20,7 +20,7 @@ namespace WorkflowCore.Services.BackgroundTasks
         public RunnablePoller(IPersistenceProvider persistenceStore, IQueueProvider queueProvider, ILoggerFactory loggerFactory, IDistributedLockProvider lockProvider, WorkflowOptions options)
         {
             _persistenceStore = persistenceStore;
-            _queueProvider = queueProvider;            
+            _queueProvider = queueProvider;
             _logger = loggerFactory.CreateLogger<RunnablePoller>();
             _lockProvider = lockProvider;
             _options = options;
@@ -52,7 +52,7 @@ namespace WorkflowCore.Services.BackgroundTasks
                 {
                     try
                     {
-                        _logger.LogDebug("Polling for runnable workflows");                        
+                        _logger.LogDebug("Polling for runnable workflows");
                         var runnables = await _persistenceStore.GetRunnableInstances(Clock.Now);
                         foreach (var item in runnables)
                         {
@@ -77,12 +77,12 @@ namespace WorkflowCore.Services.BackgroundTasks
                 {
                     try
                     {
-                        _logger.LogDebug("Polling for unprocessed events");                        
+                        _logger.LogDebug("Polling for unprocessed events");
                         var events = await _persistenceStore.GetRunnableEvents(Clock.Now);
                         foreach (var item in events.ToList())
                         {
                             _logger.LogDebug($"Got unprocessed event {item}");
-                            await _queueProvider.QueueWork(item, QueueType.Event);                            
+                            await _queueProvider.QueueWork(item, QueueType.Event);
                         }
                     }
                     finally

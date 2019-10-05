@@ -15,7 +15,7 @@ namespace WorkflowCore.Primitives
             }
 
             if ((context.PersistenceData is ControlPersistenceData) && ((context.PersistenceData as ControlPersistenceData).ChildrenActive))
-            { 
+            {
                 bool complete = true;
                 foreach (var childId in context.ExecutionPointer.Children)
                     complete = complete && IsBranchComplete(context.Workflow.ExecutionPointers, childId);
@@ -29,6 +29,6 @@ namespace WorkflowCore.Primitives
             }
 
             throw new CorruptPersistenceDataException();
-        }        
+        }
     }
 }

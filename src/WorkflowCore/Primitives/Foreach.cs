@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 
@@ -8,7 +8,7 @@ namespace WorkflowCore.Primitives
 {
     public class Foreach : ContainerStepBody
     {
-        public IEnumerable Collection { get; set; }                
+        public IEnumerable Collection { get; set; }
 
         public override ExecutionResult Run(IStepExecutionContext context)
         {
@@ -36,6 +36,6 @@ namespace WorkflowCore.Primitives
             }
 
             return ExecutionResult.Persist(context.PersistenceData);
-        }        
+        }
     }
 }

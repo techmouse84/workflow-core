@@ -1,15 +1,15 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Abp.Timing;
+﻿using Abp.Timing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 
 namespace WorkflowCore.Services.BackgroundTasks
 {
-    internal class WorkflowConsumer : QueueConsumer, IBackgroundTask
+    internal class WorkflowConsumer : QueueConsumer
     {
         private readonly IDistributedLockProvider _lockProvider;
         private readonly ObjectPool<IPersistenceProvider> _persistenceStorePool;
@@ -83,12 +83,12 @@ namespace WorkflowCore.Services.BackgroundTasks
                 Logger.LogInformation("Workflow locked {0}", itemId);
             }
         }
-        
+
         private async Task SubscribeEvent(EventSubscription subscription, IPersistenceProvider persistenceStore)
         {
             //TODO: move to own class
             Logger.LogDebug("Subscribing to event {0} {1} for workflow {2} step {3}", subscription.EventName, subscription.EventKey, subscription.WorkflowId, subscription.StepId);
-            
+
             await persistenceStore.CreateEventSubscription(subscription);
             var events = await persistenceStore.GetEvents(subscription.EventName, subscription.EventKey, subscription.SubscribeAsOf);
             foreach (var evt in events)

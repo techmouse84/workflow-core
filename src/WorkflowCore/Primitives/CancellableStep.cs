@@ -6,7 +6,7 @@ using WorkflowCore.Models;
 
 namespace WorkflowCore.Primitives
 {
-    public class CancellableStep<TStepBody, TData> : WorkflowStep<TStepBody> 
+    public class CancellableStep<TStepBody, TData> : WorkflowStep<TStepBody>
         where TStepBody : IStepBody
     {
         private readonly Expression<Func<TData, bool>> _cancelCondition;
@@ -15,12 +15,12 @@ namespace WorkflowCore.Primitives
         {
             _cancelCondition = cancelCondition;
         }
-        
+
         public override void AfterWorkflowIteration(WorkflowExecutorResult executorResult, WorkflowDefinition defintion, WorkflowInstance workflow, ExecutionPointer executionPointer)
         {
             base.AfterWorkflowIteration(executorResult, defintion, workflow, executionPointer);
             var func = _cancelCondition.Compile();
-            if (func((TData) workflow.Data))
+            if (func((TData)workflow.Data))
             {
                 executionPointer.EndTime = Clock.Now.ToUniversalTime();
                 executionPointer.Active = false;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace WorkflowCore.Models
 {
@@ -24,14 +23,14 @@ namespace WorkflowCore.Models
 
         public long? EventUserId { get; set; }
 
-        public int? EventRoleId{ get; set; }
+        public int? EventRoleId { get; set; }
 
         public string EventKey { get; set; }
 
         public bool EventPublished { get; set; }
 
-        public object EventData { get; set; }                
-        
+        public object EventData { get; set; }
+
         public Dictionary<string, object> ExtensionAttributes { get; set; } = new Dictionary<string, object>();
 
         public string StepName { get; set; }
@@ -47,9 +46,9 @@ namespace WorkflowCore.Models
         public object Outcome { get; set; }
 
         public PointerStatus Status { get; set; } = PointerStatus.Legacy;
-        
+
         public Stack<string> Scope { get; set; } = new Stack<string>();
-                        
+
     }
 
     public enum PointerStatus

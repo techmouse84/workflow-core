@@ -9,7 +9,7 @@ namespace WorkflowCore.Models
         public int? TenantId { get; set; }
 
         public string Id { get; set; }
-                
+
         public string WorkflowDefinitionId { get; set; }
 
         public int Version { get; set; }
@@ -28,15 +28,15 @@ namespace WorkflowCore.Models
 
         public DateTime CreateTime { get; set; }
 
-        public DateTime? CompleteTime { get; set; }        
+        public DateTime? CompleteTime { get; set; }
 
     }
 
-    public enum WorkflowStatus 
-    { 
-        Runnable = 0, 
-        Suspended = 1, 
-        Complete = 2, 
-        Terminated = 3 
+    public enum WorkflowStatus
+    {
+        Runnable = 0,
+        Suspended = 1,
+        Complete = 2,
+        Terminated = 3
     }
 }

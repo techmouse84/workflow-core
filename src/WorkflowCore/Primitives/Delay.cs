@@ -14,7 +14,7 @@ namespace WorkflowCore.Primitives
             {
                 return ExecutionResult.Next();
             }
-            
+
             return ExecutionResult.Sleep(Period, true);
         }
     }

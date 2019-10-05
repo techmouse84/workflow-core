@@ -12,6 +12,6 @@ namespace WorkflowCore.Interface
 
         WorkflowStep Step { get; set; }
 
-        WorkflowInstance Workflow { get; set; }        
+        WorkflowInstance Workflow { get; set; }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WorkflowCore.QueueProviders.SqlServer.Interfaces
+﻿namespace WorkflowCore.QueueProviders.SqlServer.Interfaces
 {
     public interface ISqlServerQueueProviderMigrator
     {

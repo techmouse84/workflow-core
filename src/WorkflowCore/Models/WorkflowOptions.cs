@@ -1,5 +1,4 @@
-﻿using Abp.Dependency;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using WorkflowCore.Interface;
 using WorkflowCore.Services;
@@ -22,7 +21,7 @@ namespace WorkflowCore.Models
         {
             PollInterval = TimeSpan.FromSeconds(10);
             IdleTime = TimeSpan.FromMilliseconds(100);
-            ErrorRetryInterval = TimeSpan.FromSeconds(60);            
+            ErrorRetryInterval = TimeSpan.FromSeconds(60);
 
         }
 
@@ -63,5 +62,5 @@ namespace WorkflowCore.Models
             ErrorRetryInterval = interval;
         }
     }
-        
+
 }

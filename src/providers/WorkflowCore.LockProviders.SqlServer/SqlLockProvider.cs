@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using WorkflowCore.Interface;
-using System.Data;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
+using System.Data;
 using System.Threading;
+using System.Threading.Tasks;
+using WorkflowCore.Interface;
 
 namespace WorkflowCore.LockProviders.SqlServer
 {

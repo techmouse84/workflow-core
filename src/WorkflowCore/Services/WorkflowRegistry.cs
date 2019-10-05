@@ -1,5 +1,4 @@
-﻿using Abp.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using WorkflowCore.Interface;
@@ -11,7 +10,7 @@ namespace WorkflowCore.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly List<Tuple<string, int, int?, WorkflowDefinition>> _registry = new List<Tuple<string, int, int?, WorkflowDefinition>>();
-        
+
         public WorkflowRegistry(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
@@ -26,7 +25,7 @@ namespace WorkflowCore.Services
         {
             if (version.HasValue)
             {
-                var entry = _registry.FirstOrDefault(x => x.Item1 == workflowId && x.Item2 == version.Value && x.Item3 == tenantId );
+                var entry = _registry.FirstOrDefault(x => x.Item1 == workflowId && x.Item2 == version.Value && x.Item3 == tenantId);
                 if (entry != null)
                 {
                     return entry.Item4;
@@ -51,7 +50,7 @@ namespace WorkflowCore.Services
                 throw new InvalidOperationException($"Workflow {workflow.Id} version {workflow.Version} tenant {workflow.TenantId} is already registered");
             }
 
-            var builder = (_serviceProvider.GetService(typeof(IWorkflowBuilder)) as IWorkflowBuilder).UseData<object>();            
+            var builder = (_serviceProvider.GetService(typeof(IWorkflowBuilder)) as IWorkflowBuilder).UseData<object>();
             workflow.Build(builder);
             var def = builder.Build(workflow.Id, workflow.TenantId, workflow.Version);
             _registry.Add(new Tuple<string, int, int?, WorkflowDefinition>(workflow.Id, workflow.Version, workflow.TenantId, def));

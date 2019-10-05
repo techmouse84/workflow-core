@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Threading.Tasks;
 using WorkflowCore.Models;
 
 namespace WorkflowCore.Interface
@@ -16,8 +15,8 @@ namespace WorkflowCore.Interface
         /// Stop the workflow host
         /// </summary>
         void Stop();
-        
-        
+
+
         event StepErrorEventHandler OnStepError;
         void ReportStepError(WorkflowInstance workflow, WorkflowStep step, Exception exception);
 

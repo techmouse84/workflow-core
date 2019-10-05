@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Abp.Timing;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Abp.Timing;
-using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 
 namespace WorkflowCore.Services.BackgroundTasks
 {
-    internal class EventConsumer : QueueConsumer, IBackgroundTask
+    internal class EventConsumer : QueueConsumer
     {
         private readonly IPersistenceProvider _persistenceStore;
         private readonly IDistributedLockProvider _lockProvider;
@@ -57,7 +57,7 @@ namespace WorkflowCore.Services.BackgroundTasks
                 Logger.LogInformation($"Event locked {itemId}");
             }
         }
-        
+
         private async Task<bool> SeedSubscription(Event evt, EventSubscription sub, CancellationToken cancellationToken)
         {
             if (await _lockProvider.AcquireLock(sub.WorkflowId, cancellationToken))

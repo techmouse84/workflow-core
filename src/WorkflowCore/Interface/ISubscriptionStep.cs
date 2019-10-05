@@ -2,7 +2,7 @@
 
 namespace WorkflowCore.Interface
 {
-    public interface ISubscriptionStep 
+    public interface ISubscriptionStep
     {
         string EventName { get; set; }
         LambdaExpression EventKey { get; set; }

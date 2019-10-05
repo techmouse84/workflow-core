@@ -15,7 +15,7 @@ namespace WorkflowCore.Primitives
             {
                 return ExecutionResult.Sleep(Interval, new SchedulePersistenceData() { Elapsed = false });
             }
-            
+
             if (context.PersistenceData is SchedulePersistenceData)
             {
                 if (!((SchedulePersistenceData)context.PersistenceData).Elapsed)
@@ -34,10 +34,10 @@ namespace WorkflowCore.Primitives
                 {
                     return ExecutionResult.Next();
                 }
-            
+
                 return ExecutionResult.Persist(context.PersistenceData);
             }
-            
+
             throw new ArgumentException();
         }
     }

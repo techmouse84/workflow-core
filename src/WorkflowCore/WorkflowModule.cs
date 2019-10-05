@@ -1,10 +1,7 @@
 ﻿using Abp.Dependency;
 using Abp.Modules;
 using Microsoft.Extensions.ObjectPool;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 using WorkflowCore.Primitives;
@@ -19,7 +16,7 @@ namespace WorkflowCore
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-            
+
 
         }
 

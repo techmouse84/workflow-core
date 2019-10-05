@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace WorkflowCore.Models.DefinitionStorage.v1
 {
     public class StepSourceV1
     {
         public string StepType { get; set; }
-        
+
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -30,6 +29,6 @@ namespace WorkflowCore.Models.DefinitionStorage.v1
 
         public Dictionary<string, string> Outputs { get; set; } = new Dictionary<string, string>();
 
-        
+
     }
 }

@@ -7,7 +7,7 @@ namespace WorkflowCore.Interface
 {
     public interface IWorkflowBuilder
     {
-        int LastStep { get; }                
+        int LastStep { get; }
 
         IWorkflowBuilder<T> UseData<T>();
 
@@ -17,7 +17,7 @@ namespace WorkflowCore.Interface
     }
 
     public interface IWorkflowBuilder<TData> : IWorkflowBuilder
-    {        
+    {
         IStepBuilder<TData, TStep> StartWith<TStep>(Action<IStepBuilder<TData, TStep>> stepSetup = null) where TStep : IStepBody;
 
         IStepBuilder<TData, InlineStepBody> StartWith(Func<IStepExecutionContext, ExecutionResult> body);

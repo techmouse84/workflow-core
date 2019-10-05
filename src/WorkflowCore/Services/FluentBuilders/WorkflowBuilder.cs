@@ -41,7 +41,7 @@ namespace WorkflowCore.Services
         {
             step.Id = Steps.Count();
             Steps.Add(step);
-        }               
+        }
 
     }
 
@@ -108,5 +108,5 @@ namespace WorkflowCore.Services
             return this;
         }
     }
-        
+
 }

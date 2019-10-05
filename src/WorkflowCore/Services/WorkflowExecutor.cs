@@ -1,14 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Abp.Timing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
-using Abp.Timing;
 
 namespace WorkflowCore.Services
 {
@@ -181,7 +180,7 @@ namespace WorkflowCore.Services
 
                 var propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
 
-                if ( CanChangeType(resolvedValue, propertyType))
+                if (CanChangeType(resolvedValue, propertyType))
                 {
                     var safeValue = (resolvedValue == null) ? null : Convert.ChangeType(resolvedValue, propertyType);
 
@@ -191,7 +190,7 @@ namespace WorkflowCore.Services
                 {
                     property.SetValue(body, resolvedValue);
                 }
-                    
+
             }
         }
 
@@ -282,6 +281,6 @@ namespace WorkflowCore.Services
                 workflow.CompleteTime = Clock.Now.ToUniversalTime();
             }
         }
-        
+
     }
 }

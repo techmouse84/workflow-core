@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using WorkflowCore.Interface;
 
 namespace WorkflowCore.Models
@@ -44,7 +43,7 @@ namespace WorkflowCore.Models
         }
 
         public virtual void AfterExecute(WorkflowExecutorResult executorResult, IStepExecutionContext context, ExecutionResult stepResult, ExecutionPointer executionPointer)
-        {            
+        {
         }
 
         public virtual void PrimeForRetry(ExecutionPointer pointer)
@@ -77,15 +76,15 @@ namespace WorkflowCore.Models
     }
 
     public class WorkflowStep<TStepBody> : WorkflowStep
-        where TStepBody : IStepBody 
+        where TStepBody : IStepBody
     {
         public override Type BodyType => typeof(TStepBody);
     }
 
-	public enum ExecutionPipelineDirective 
-    { 
-        Next = 0, 
-        Defer = 1, 
-        EndWorkflow = 2 
+    public enum ExecutionPipelineDirective
+    {
+        Next = 0,
+        Defer = 1,
+        EndWorkflow = 2
     }
 }

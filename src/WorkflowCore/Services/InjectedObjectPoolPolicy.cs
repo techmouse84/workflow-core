@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
-using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace WorkflowCore.Services
 {

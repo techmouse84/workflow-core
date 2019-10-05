@@ -1,5 +1,4 @@
-﻿using System;
-using WorkflowCore.Models;
+﻿using WorkflowCore.Models;
 
 namespace WorkflowCore.Interface
 {

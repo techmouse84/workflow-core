@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using Abp.Runtime.Session;
+using Abp.Timing;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Abp.Runtime.Session;
-using Abp.Timing;
-using Microsoft.Extensions.Logging;
 using WorkflowCore.Exceptions;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
@@ -43,7 +42,7 @@ namespace WorkflowCore.Services
             return StartWorkflow<object>(workflowId, tenantId, version, data);
         }
 
-        public Task<string> StartWorkflow<TData>(string workflowId, int? tenantId, TData data = null) 
+        public Task<string> StartWorkflow<TData>(string workflowId, int? tenantId, TData data = null)
             where TData : class
         {
             return StartWorkflow<TData>(workflowId, tenantId, null, data);
@@ -52,7 +51,7 @@ namespace WorkflowCore.Services
         public async Task<string> StartWorkflow<TData>(string workflowId, int? tenantId, int? version, TData data = null)
             where TData : class
         {
-            
+
             var def = _registry.GetDefinition(workflowId, tenantId, version);
             if (def == null)
             {
@@ -106,7 +105,7 @@ namespace WorkflowCore.Services
         {
             if (!await _lockProvider.AcquireLock(workflowId, new CancellationToken()))
                 return false;
-            
+
             try
             {
                 var wf = await _persistenceStore.GetWorkflowInstance(workflowId);
@@ -178,7 +177,7 @@ namespace WorkflowCore.Services
                 await _lockProvider.ReleaseLock(workflowId);
             }
         }
-        
+
         public void RegisterWorkflow<TWorkflow>()
             where TWorkflow : IWorkflow, new()
         {

@@ -8,9 +8,9 @@ namespace WorkflowCore.Primitives
         public override Type BodyType => null;
 
         public override ExecutionPipelineDirective InitForExecution(
-            WorkflowExecutorResult executorResult, 
-            WorkflowDefinition defintion, 
-            WorkflowInstance workflow, 
+            WorkflowExecutorResult executorResult,
+            WorkflowDefinition defintion,
+            WorkflowInstance workflow,
             ExecutionPointer executionPointer)
         {
             return ExecutionPipelineDirective.EndWorkflow;

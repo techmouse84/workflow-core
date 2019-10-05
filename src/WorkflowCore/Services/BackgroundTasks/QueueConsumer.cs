@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 
@@ -16,7 +16,7 @@ namespace WorkflowCore.Services.BackgroundTasks
         protected readonly IQueueProvider QueueProvider;
         protected readonly ILogger Logger;
         protected readonly WorkflowOptions Options;
-        protected Task DispatchTask;        
+        protected Task DispatchTask;
         private CancellationTokenSource _cancellationTokenSource;
 
         protected QueueConsumer(IQueueProvider queueProvider, ILoggerFactory loggerFactory, WorkflowOptions options)
@@ -36,8 +36,8 @@ namespace WorkflowCore.Services.BackgroundTasks
             }
 
             _cancellationTokenSource = new CancellationTokenSource();
-                        
-            DispatchTask = new Task(Execute);
+
+            DispatchTask = Execute();
             DispatchTask.Start();
         }
 
@@ -49,7 +49,7 @@ namespace WorkflowCore.Services.BackgroundTasks
             DispatchTask = null;
         }
 
-        private async void Execute()
+        private async Task Execute()
         {
             var cancelToken = _cancellationTokenSource.Token;
             var opts = new ExecutionDataflowBlockOptions()

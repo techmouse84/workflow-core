@@ -2,6 +2,6 @@
 {
     public interface ISubscriptionBody : IStepBody
     {
-        object EventData { get; set; }        
+        object EventData { get; set; }
     }
 }

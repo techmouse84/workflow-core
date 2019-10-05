@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using WorkflowCore.Exceptions;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
@@ -18,7 +18,7 @@ namespace WorkflowCore.Primitives
             }
 
             if ((context.PersistenceData is ControlPersistenceData) && ((context.PersistenceData as ControlPersistenceData).ChildrenActive))
-            { 
+            {
                 bool complete = true;
                 foreach (var childId in context.ExecutionPointer.Children)
                 {

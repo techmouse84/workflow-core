@@ -66,12 +66,12 @@ namespace WorkflowCore.Services
             return _workflowController.PublishEvent(eventName, eventKey, eventData, effectiveDate);
         }
 
-        public void Start()
+        public async Task Start()
         {
             _shutdown = false;
             PersistenceStore.EnsureStoreExists();
-            QueueProvider.Start().Wait();
-            LockProvider.Start().Wait();
+            await QueueProvider.Start();
+            await LockProvider.Start();
 
             Logger.LogInformation("Starting backgroud tasks");
 
@@ -79,7 +79,7 @@ namespace WorkflowCore.Services
                 task.Start();
         }
 
-        public void Stop()
+        public async Task Stop()
         {
             _shutdown = true;
 
@@ -89,8 +89,8 @@ namespace WorkflowCore.Services
 
             Logger.LogInformation("Worker tasks stopped");
 
-            QueueProvider.Stop();
-            LockProvider.Stop();
+            await QueueProvider.Stop();
+            await LockProvider.Stop();
         }
 
         public void RegisterWorkflow<TWorkflow>()

@@ -37,8 +37,8 @@ namespace WorkflowCore.Services.BackgroundTasks
 
             _cancellationTokenSource = new CancellationTokenSource();
 
-            DispatchTask = Execute();
-            DispatchTask.Start();
+            DispatchTask = Task.Factory.StartNew(()=>Execute());
+           
         }
 
         public virtual void Stop()
@@ -51,50 +51,60 @@ namespace WorkflowCore.Services.BackgroundTasks
 
         private async Task Execute()
         {
-            var cancelToken = _cancellationTokenSource.Token;
-            var opts = new ExecutionDataflowBlockOptions()
+            try
             {
-                MaxDegreeOfParallelism = MaxConcurrentItems,
-                BoundedCapacity = MaxConcurrentItems + 1
-            };
-
-            var actionBlock = new ActionBlock<string>(ExecuteItem, opts);
-
-            while (!cancelToken.IsCancellationRequested)
-            {
-                try
+                var cancelToken = _cancellationTokenSource.Token;
+                var opts = new ExecutionDataflowBlockOptions()
                 {
-                    if (!SpinWait.SpinUntil(() => actionBlock.InputCount == 0, Options.IdleTime))
+                    MaxDegreeOfParallelism = MaxConcurrentItems,
+                    BoundedCapacity = MaxConcurrentItems + 1
+                };
+
+                var actionBlock = new ActionBlock<string>(ExecuteItem, opts);
+
+                while (!cancelToken.IsCancellationRequested)
+                {
+                    try
                     {
-                        continue;
+                        if (!SpinWait.SpinUntil(() => actionBlock.InputCount == 0, Options.IdleTime))
+                        {
+                            continue;
+                        }
+
+                        var item = await QueueProvider.DequeueWork(Queue, cancelToken);
+
+                        if (item == null)
+                        {
+                            if (!QueueProvider.IsDequeueBlocking)
+                                await Task.Delay(Options.IdleTime, cancelToken);
+                            continue;
+                        }
+
+                        if (!actionBlock.Post(item))
+                        {
+                            await QueueProvider.QueueWork(item, Queue);
+                        }
                     }
-
-                    var item = await QueueProvider.DequeueWork(Queue, cancelToken);
-
-                    if (item == null)
+                    catch (OperationCanceledException ce)
                     {
-                        if (!QueueProvider.IsDequeueBlocking)
-                            await Task.Delay(Options.IdleTime, cancelToken);
-                        continue;
+                        Logger.LogError(ce.Message, ce);
                     }
-
-                    if (!actionBlock.Post(item))
+                    catch (Exception ex)
                     {
-                        await QueueProvider.QueueWork(item, Queue);
+                        Logger.LogError(ex.Message, ex);
                     }
                 }
-                catch (OperationCanceledException ce)
-                {
-                    Logger.LogError(ce.Message, ce);
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex.Message, ex);
-                }
+
+                actionBlock.Complete();
+                await actionBlock.Completion;
             }
-
-            actionBlock.Complete();
-            await actionBlock.Completion;
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message, ex);
+                //This is to prevent async void crashing the program. 
+                //Should never reach this line
+                //TODO remove async void
+            }
         }
 
         private async Task ExecuteItem(string itemId)

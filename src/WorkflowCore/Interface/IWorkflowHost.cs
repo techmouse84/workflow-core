@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 using WorkflowCore.Models;
 
 namespace WorkflowCore.Interface
@@ -9,12 +10,12 @@ namespace WorkflowCore.Interface
         /// <summary>
         /// Start the workflow host, this enable execution of workflows
         /// </summary>
-        void Start();
+        Task Start();
 
         /// <summary>
         /// Stop the workflow host
         /// </summary>
-        void Stop();
+        Task Stop();
 
 
         event StepErrorEventHandler OnStepError;

@@ -36,7 +36,6 @@ namespace WorkflowCore.Services
             LockProvider = lockProvider;
             _backgroundTasks = backgroundTasks;
             _workflowController = workflowController;
-            persistenceStore.EnsureStoreExists();
         }
 
         public Task<string> StartWorkflow(string workflowId, int? tenantId, object data = null)

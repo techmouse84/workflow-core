@@ -119,7 +119,7 @@ namespace WorkflowCore.Services.BackgroundTasks
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Error executing item {itemId} - {ex.Message}");
+                Logger.LogError($"Error executing item {itemId} - {ex.Message}", ex);
             }
         }
     }

@@ -277,6 +277,13 @@ namespace WorkflowCore.Services
 
             if ((workflow.NextExecution == null) && (workflow.ExecutionPointers.All(x => x.EndTime != null)))
             {
+                if (workflow.ExecutionPointers.Count() == 0)
+                {
+                    //this should never happen; minimally there's 1 ep
+
+                    _logger.LogError($"workflow id ${workflow.Id} contains no execution pointers.");
+                }
+
                 workflow.Status = WorkflowStatus.Complete;
                 workflow.CompleteTime = Clock.Now.ToUniversalTime();
             }

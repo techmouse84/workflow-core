@@ -34,8 +34,7 @@ namespace WorkflowCore.UnitTests.Services
             A.CallTo(() => DateTimeProvider.Now).Returns(DateTime.Now);
 
             //config logging
-            var loggerFactory = new LoggerFactory();
-            loggerFactory.AddConsole(LogLevel.Debug);            
+            var loggerFactory = new LoggerFactory();          
 
             Subject = new ExecutionResultProcessor(PointerFactory, Options, loggerFactory);
         }

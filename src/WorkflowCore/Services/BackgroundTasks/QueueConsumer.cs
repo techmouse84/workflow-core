@@ -43,7 +43,8 @@ namespace WorkflowCore.Services.BackgroundTasks
 
         public virtual void Stop()
         {
-            _cancellationTokenSource.Cancel();
+            if (_cancellationTokenSource != null)
+                _cancellationTokenSource.Cancel();
             if (DispatchTask != null)
                 DispatchTask.Wait();
             DispatchTask = null;

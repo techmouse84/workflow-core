@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using WorkflowCore.Interface;
@@ -12,6 +13,7 @@ namespace WorkflowCore.Services
     /// </summary>
     public class SingleNodeQueueProvider : IQueueProvider
     {
+        private bool isDisposed;
 
         private readonly BlockingCollection<string> _runQueue = new BlockingCollection<string>();
         private readonly BlockingCollection<string> _eventQueue = new BlockingCollection<string>();
@@ -41,6 +43,15 @@ namespace WorkflowCore.Services
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            isDisposed = true;
         }
 
         private BlockingCollection<string> SelectQueue(QueueType queue)

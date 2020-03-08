@@ -37,8 +37,8 @@ namespace WorkflowCore.Services.BackgroundTasks
 
             _cancellationTokenSource = new CancellationTokenSource();
 
-            DispatchTask = Task.Factory.StartNew(()=>Execute());
-           
+            DispatchTask = Task.Factory.StartNew(() => Execute());
+
         }
 
         public virtual void Stop()
